@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // import { defineNuxtConfig } from 'nuxt3'
-console.log(process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID)
 export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
@@ -9,13 +8,22 @@ export default defineNuxtConfig({
     },
     googleClientSecret: process.env.NUXT_GOOGLE_CLIENT_SECRET,
   },
+  router: {},
   // css: ['~/assets/main'],
   modules: [
-    // ...
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
-    // 'googleapis',
+    '@samk-dev/nuxt-vcalendar',
+    'nuxt-headlessui',
+    // '@googleapis',
     // '@kyvg/vue3-notification',
   ],
-  // plugins: ['~/plugins/notification.js'],
+  headlessui: {
+    prefix: 'Headless',
+  },
+  // serverMiddleware: ['~/api/database'],
+  // plugins: ['~/plugins/vue3-notification.ts', '~/plugins/v-calendar.ts'],
 })
+// module.exports = {
+//   serverMiddleware: ['~/api/database'],
+// }
