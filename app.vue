@@ -4,13 +4,13 @@
       <li><NuxtLink to="/about">About</NuxtLink></li>
     </ul>
   </nav> -->
+  <NuxtLoadingIndicator />
   <NuxtLayout>
-    <CustomLoadingIndicator />
+    <!-- <CustomLoadingIndicator /> -->
     <NuxtPage></NuxtPage>
   </NuxtLayout>
 </template>
-<script setup>
-const { id } = useRoute().params
+<script setup lang="ts">
 const open = ref(false)
 // const { pending, data: posts } = useFetch('/api/posts', {
 //   lazy: true,

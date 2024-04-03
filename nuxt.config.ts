@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-// import { defineNuxtConfig } from 'nuxt3'
+// import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
@@ -14,13 +14,21 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     '@samk-dev/nuxt-vcalendar',
-    'nuxt-headlessui',
     // '@googleapis',
+    'nuxt-headlessui',
     // '@kyvg/vue3-notification',
   ],
-  headlessui: {
-    prefix: 'Headless',
-  },
+  // headlessui: {
+  //   prefix: 'Headless',
+  // },
+  // devServer: {
+  //   host: '0.0.0.0',
+  //   port: 3000,
+  // },
+  // server: {
+  //   port: 3000,
+  // },
+
   // serverMiddleware: ['~/api/database'],
   // plugins: ['~/plugins/vue3-notification.ts', '~/plugins/v-calendar.ts'],
 })

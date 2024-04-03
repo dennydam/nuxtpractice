@@ -10,6 +10,7 @@ const runtimeConfig = useRuntimeConfig()
 
 const prisma = new PrismaClient()
 
+// console.log('prisma', prisma)
 export default defineEventHandler(async (event) => {
   // const { googleClientId, googleClientSecret } = useRuntimeConfig()
 

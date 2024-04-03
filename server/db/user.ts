@@ -24,7 +24,6 @@ class User {
           statusMessage: 'Could not create user. Please try again later.',
         })
       })
-
     return userRecord
   }
 
@@ -41,7 +40,6 @@ class User {
           statusMessage: 'Could not find user. Please try again later.',
         })
       })
-
     return userRecord
   }
 }

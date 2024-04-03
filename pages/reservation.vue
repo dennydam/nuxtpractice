@@ -59,14 +59,14 @@
   </div> -->
 
   <ul
-    class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400"
+    class="flex justify-center flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400"
   >
     <li class="me-2" @click="goProductPage">
       <a
         href="#"
         class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"
       >
-        Profile
+        Service
       </a>
     </li>
     <li class="me-2" @click="goTimePage">
@@ -223,13 +223,13 @@
     </div>
   </form> -->
   <!-- <button @click="testApi">77</button> -->
-  <ReservationItem v-if="productPage" />
+  <ReservationItem v-if="productPage" @selectItem="selectItem" />
   <ReservationTime v-if="timePage" />
 
   <!-- <div v-if="pending">Loading ...</div> -->
 </template>
 <script setup lang="ts">
-import type { analyticsreporting_v4 } from 'googleapis'
+// import type { analyticsreporting_v4 } from 'googleapis'
 import ReservationItem from '@/components/ReservationItem.vue'
 import ReservationTime from '@/components/ReservationTime.vue'
 import { ref, computed } from 'vue'
@@ -284,14 +284,22 @@ const currentDate = ref<number>(0)
 const leapMonthDay = reactive<number[]>([31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
 // 平年
 const normalMonthDay = reactive<number[]>([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
+
+function selectItem() {
+  productPage.value = false
+  timePage.value = true
+  console.log('selectItem')
+}
 function goProductPage() {
-  productPage.value = !productPage.value
+  timePage.value = false
+  productPage.value = true
   console.log('productPage')
 }
 
 function goTimePage() {
-  timePage.value = !timePage.value
-  console.log('productPage')
+  productPage.value = false
+  timePage.value = true
+  console.log('timePage', timePage.value)
 }
 
 function selectDate(item: any) {

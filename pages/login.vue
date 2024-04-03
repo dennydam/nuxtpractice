@@ -222,10 +222,11 @@ const handleGoogleLogin = async () => {
   const { data, error } = await userStore.googleLogin({
     accessToken,
   })
+  // console.log('會員資料', data.value)
 
   if (data.value) {
     // pushNotify('success', '登入成功', '請等待頁面自動跳轉')
-    router.push({ path: '/reservation' })
+    router.push({ path: '/hello' })
     // navigateTo(route.query.redirect_to ?? '/')
   } else {
     // pushNotify('error', '登入失敗', error.value?.data?.message ?? '未知錯誤')

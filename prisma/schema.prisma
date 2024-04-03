@@ -7,8 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+      // providerName: options.providerName,
+      //     providerUserId: options.providerUserId,
+      //     nickname: options.nickname,
+      //     email: options.email,
+      //     password: options.password,
+      //     avatar: options.avatar,
+      //     emailVerified: options.emailVerified,
+
 model User {
-  id             String        @id @default(uuid())
+  id             String   @id @default(uuid())
   providerName   String?
   providerUserId String?
   nickname       String        @default("User")
@@ -21,15 +29,23 @@ model User {
   Appointment    Appointment[]
 }
 
+// model AppointmentTest {
+//   id Int @id @default(autoincrement())
+//   treatment String
+//   appointmentTime DateTime @default(now())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   authorId String?
+// }
 model Appointment {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  start       DateTime
-  end         DateTime
-  allDay      Boolean
-  userId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userId], references: [id])
+  id Int @id @default(autoincrement())
+  treatment String
+  appointmentTime DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  authorId String?
+  User     User?    @relation(fields: [authorId], references: [id])
+
+  @@unique([appointmentTime], name: "UniqueAppointmentTimeRange")
 }
+

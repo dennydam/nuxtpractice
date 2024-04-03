@@ -9,6 +9,7 @@
       Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
     </p>
     <button
+      @click="$emit('selectItem', 66666)"
       type="button"
       class="text-gray-900 bg-[#ffadc4] border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
     >
@@ -48,6 +49,11 @@
               stroke="currentColor"
               stroke-linecap="round"
               stroke-linejoin="round"
+
+
+
+
+
               stroke-width="2"
               d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7"
             />
@@ -59,10 +65,39 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-const isExpanded = ref(false)
 
+const productData = ref([
+  {
+    id: 1,
+    title: 'Noteworthy technology acquisitions 2021',
+    content: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    chooseItem: '',
+  },
+  {
+    id: 2,
+    title: 'Noteworthy technology acquisitions 2022',
+    content: 'Here are the biggest enterprise technology acquisitions of 2022 so far, in reverse chronological order.',
+  },
+])
+
+const emit = defineEmits<{
+  (e: 'selectItem', id: number): void
+  (e: 'update', value: string): void
+}>()
+// const emit = defineEmits<{
+//   change: [id: number] // 具名元组语法
+//   update: [value: string]
+// }>()
+
+const isExpanded = ref(false)
+// const chooseItem = ref(any)
+
+const selectItem = () => {
+  console.log('666')
+  chooseItem.value = '333'
+}
 const toggleExpand = () => {
   console.log('777')
   isExpanded.value = !isExpanded.value

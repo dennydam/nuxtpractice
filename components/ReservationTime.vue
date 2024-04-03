@@ -1,8 +1,37 @@
 <template>
   <!-- <span>{{ testString }}</span> -->
 
-  <!-- <div class="container mx-auto">
+  <!-- <VDatePicker v-model="dateChose" /> -->
+  <div class="" style="font-weight: 900; font-family: Avenir, sans-serif">
+    <div class="toolbar">
+      <button class="btn" @click="preMonth">上一月</button>
+      <div class="date">{{ currentYear }}年{{ currentMonth }}月</div>
+      <button class="btn hover" @click="nextMonth">下一月</button>
+    </div>
+    <div class="container mx-auto calendar">
+      <div v-for="(item, index) in header" :key="index" class="grid-item">
+        {{ item }}
+      </div>
+      <div v-for="(item, index) in lastMonthSurplusDayArray" :key="index" class="grid-item">
+        {{ item }}
+      </div>
+      <div
+        v-for="(item, index) in currentMonthDayCount"
+        @click="selectDate(item)"
+        :key="index"
+        :class="['grid-item', currentDate === item ? 'very-hot' : 'normal-hot']"
+      >
+        {{ item }}
+      </div>
+      <div v-for="(item, index) in nextMonthSurplusDayArray" :key="index" class="grid-item">
+        {{ item }}
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto calendar mt-5">
     <div class="flex flex-wrap">
+      <span class="mt-3"> Available start times</span>
       <div class="flex text-center">
         <div style="margin: 40px 20px" class="" v-for="(section, index) in timeSections" :key="index">
           <div class="">
@@ -29,39 +58,12 @@
         </div>
       </div>
     </div>
-  </div> -->
-  <!-- <VDatePicker v-model="dateChose" /> -->
-  <div class="" style="font-weight: 900; font-family: Avenir, sans-serif">
-    <div class="toolbar">
-      <div class="btn" @click="preMonth">上一月</div>
-      <div class="date">{{ currentYear }}年{{ currentMonth }}月</div>
-      <div class="btn" @click="nextMonth">下一月</div>
-    </div>
-    <div class="container mx-auto">
-      <div v-for="(item, index) in header" :key="index" class="grid-item">
-        {{ item }}
-      </div>
-      <div v-for="(item, index) in lastMonthSurplusDayArray" :key="index" class="grid-item">
-        {{ item }}
-      </div>
-      <div
-        v-for="(item, index) in currentMonthDayCount"
-        @click="selectDate(item)"
-        :key="index"
-        :class="['grid-item', currentDate === item ? 'very-hot' : 'normal-hot']"
-      >
-        {{ item }}
-      </div>
-      <div v-for="(item, index) in nextMonthSurplusDayArray" :key="index" class="grid-item">
-        {{ item }}
-      </div>
-    </div>
   </div>
 
   <!-- <div v-if="pending">Loading ...</div> -->
 </template>
 <script setup lang="ts">
-import type { analyticsreporting_v4 } from 'googleapis'
+// import type { analyticsreporting_v4 } from 'googleapis'
 import RerservationItem from '@/components/ReservationItem.vue'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -227,15 +229,15 @@ timeArr.value = [
 
 timeSections.value = [
   {
-    label: '早上',
+    label: 'morning',
     times: timeArr.value.slice(0, 4),
   },
   {
-    label: '中午',
+    label: 'afternoon',
     times: timeArr.value.slice(4, 8),
   },
   {
-    label: '晚上',
+    label: 'evening',
     times: timeArr.value.slice(8),
   },
 ]
@@ -361,5 +363,9 @@ onMounted(() => {
 }
 .very-hot {
   background-color: #e07e94;
+}
+.calendar {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
 }
 </style>

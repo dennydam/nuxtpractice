@@ -1,7 +1,7 @@
-import user from './user'
-import appoiintment from './appointment'
+// import user from './user'
+// import appointment from './appointment'
 
-export default {
-  user,
-  appoiintment,
-}
+// export default {
+//   user,
+//   appointment,
+// }

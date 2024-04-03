@@ -143,18 +143,20 @@
         </div>
       </div>
     </nav>
-    <div class="mx-auto relative">
-      <img
-        class="w-full h-80 object-contain"
-        src="../public/towfiqu-barbhuiya-jbjmimlaC-U-unsplash.jpg"
-        alt="Your Image"
-      />
-      <!-- <button
-        class="absolute top-1/2 left-1/2 bg-gray-700 transform -translate-x-1/2 -translate-y-1/2 text-white px-4 py-2 rounded-full"
-      >
-        Your Button
-      </button> -->
-    </div>
+    <!-- <div class="img-container" style="height: 50%">
+      <img class="img-fluid" src="../public/towfiqu-barbhuiya-jbjmimlaC-U-unsplash.jpg" alt="Your Image" />
+    </div> -->
+    <section
+      class=""
+      style="
+        height: 500px;
+        background-image: url(/towfiqu-barbhuiya-jbjmimlaC-U-unsplash.jpg);
+        background-size: cover;
+        background-position: center;
+      "
+    ></section>
+    <!-- background-image: url(/uploads/simplebeautydemo/image_files/background/0fbed59ed6ab3bacd565f376b50746f1.jpg); background-size: cover;background-position: center; -->
+
     <slot />
   </div>
 </template>
@@ -167,6 +169,12 @@ function toggle() {
 }
 </script>
 <style>
+.img-container img {
+  max-width: 100%; /* 限制圖片的最大寬度為容器的寬度 */
+  height: auto; /* 讓圖片高度自適應寬度，從而保持等比例放大縮小 */
+  max-height: 100%; /* 限制圖片的最大高度為容器的高度 */
+}
+
 .test-bg {
   background: none !important;
   background-color: transparent !important;

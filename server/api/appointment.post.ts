@@ -2,46 +2,34 @@ import { defineEventHandler, readBody, createError } from 'h3'
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-import db from '../db/appointment'
-export default defineEventHandler(() => {
-  const appoiintment = prisma.appointment.create({
-    test: 'test',
+// import db from '../db/appointment'
+import appointment from '../db/appointment'
+
+// import db from '@/server/db'
+
+// userRecord = await user.createUser({
+//   providerName: 'google',
+//   providerUserId: userInfo.sub,
+//   nickname: userInfo.name,
+//   email: userInfo.email,
+//   password: null,
+//   avatar: userInfo.picture,
+//   emailVerified: userInfo.email_verified,
+// })
+export default defineEventHandler(async (event) => {
+  console.log('appointment.post.ts')
+  const body = await readBody(event)
+  console.log('body', body)
+  const appointmentRecord = await appointment.createAppointment({
+    id: 'test',
+    treatment: '',
+    appointmentTime: '',
+    createdAt: '',
+    updatedAt: '',
+    User: '',
   })
 
-  return appoiintment
+  return {
+    data: appointmentRecord,
+  }
 })
-
-// export default defineEventHandler(async (event) => {
-//   const body = await readBody(event)
-//   let user = null
-//   if (body.name) {
-//     user = await prisma.user
-//       .create({
-//         data: {
-//           name: body.name,
-//         },
-//       })
-//       .then((response) => {
-//         user = response
-//         console.log('response', response)
-//       })
-//   }
-//   return {
-//     user: user,
-//   }
-// })
-// export default defineEventHandler(() => {
-//   const user = prisma.user.create({
-//     data: {
-//       providerName: null,
-//       providerUserId: null,
-//       nickname: 'Ryan',
-//       email: 'ryanchien8125@gmail.com',
-//       password: '這裡要放密碼的雜湊值',
-//       avatar: '',
-//       emailVerified: true,
-//     },
-//   })
-
-//   return user
-// })
