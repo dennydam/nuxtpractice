@@ -67,13 +67,14 @@
 
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import type { ProductData } from '@/utils/types'
 
-const productData = ref([
+const productData = ref<ProductData[]>([
   {
     id: 1,
     title: 'Noteworthy technology acquisitions 2021',
     content: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-    chooseItem: '',
+    // chooseItem: '',
   },
   {
     id: 2,
@@ -81,6 +82,7 @@ const productData = ref([
     content: 'Here are the biggest enterprise technology acquisitions of 2022 so far, in reverse chronological order.',
   },
 ])
+// const tableData = ref<TableDataItem[]>([])
 
 const emit = defineEmits<{
   (e: 'selectItem', id: number): void
@@ -92,7 +94,7 @@ const emit = defineEmits<{
 // }>()
 
 const isExpanded = ref(false)
-// const chooseItem = ref(any)
+const chooseItem = ref()
 
 const selectItem = () => {
   console.log('666')

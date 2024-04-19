@@ -4,6 +4,8 @@
       <li><NuxtLink to="/about">About</NuxtLink></li>
     </ul>
   </nav> -->
+  <notifications />
+
   <NuxtLoadingIndicator />
   <NuxtLayout>
     <!-- <CustomLoadingIndicator /> -->
@@ -11,6 +13,8 @@
   </NuxtLayout>
 </template>
 <script setup lang="ts">
+import { provide } from 'vue'
+
 const open = ref(false)
 // const { pending, data: posts } = useFetch('/api/posts', {
 //   lazy: true,

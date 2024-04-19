@@ -226,7 +226,7 @@ const handleGoogleLogin = async () => {
 
   if (data.value) {
     // pushNotify('success', '登入成功', '請等待頁面自動跳轉')
-    router.push({ path: '/hello' })
+    router.push({ path: '/reservation' })
     // navigateTo(route.query.redirect_to ?? '/')
   } else {
     // pushNotify('error', '登入失敗', error.value?.data?.message ?? '未知錯誤')

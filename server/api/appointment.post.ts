@@ -2,7 +2,6 @@ import { defineEventHandler, readBody, createError } from 'h3'
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-// import db from '../db/appointment'
 import appointment from '../db/appointment'
 
 // import db from '@/server/db'
@@ -20,6 +19,16 @@ export default defineEventHandler(async (event) => {
   console.log('appointment.post.ts')
   const body = await readBody(event)
   console.log('body', body)
+  const findAppointment = await appointment.getAppointmentByTime({
+    appointmentTime: body.appointmentTime,
+  })
+  if (findAppointment) {
+    console.log('找到同赴時間拉', findAppointment)
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Appointment already exists.',
+    })
+  }
   const appointmentRecord = await appointment.createAppointment({
     id: 'test',
     treatment: '',
@@ -28,7 +37,6 @@ export default defineEventHandler(async (event) => {
     updatedAt: '',
     User: '',
   })
-
   return {
     data: appointmentRecord,
   }

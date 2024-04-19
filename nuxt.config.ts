@@ -17,7 +17,12 @@ export default defineNuxtConfig({
     // '@googleapis',
     'nuxt-headlessui',
     // '@kyvg/vue3-notification',
+    // '~/plugins/database.js',
   ],
+  nitro: {
+    // plugins: ['~/plugins/database.js'],
+  },
+  // plugins: ['~/plugins/database.js'],
   // headlessui: {
   //   prefix: 'Headless',
   // },

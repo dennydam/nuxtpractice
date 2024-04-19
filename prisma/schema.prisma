@@ -45,7 +45,6 @@ model Appointment {
   updatedAt DateTime @updatedAt
   authorId String?
   User     User?    @relation(fields: [authorId], references: [id])
-
   @@unique([appointmentTime], name: "UniqueAppointmentTimeRange")
 }
 
