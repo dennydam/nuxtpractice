@@ -12,7 +12,11 @@
       <div v-for="(item, index) in header" :key="index" class="grid-item">
         {{ item }}
       </div>
-      <div v-for="(item, index) in lastMonthSurplusDayArray" :key="index" class="grid-item">
+      <div
+        v-for="(item, index) in lastMonthSurplusDayArray"
+        :key="index"
+        class="grid-item"
+      >
         {{ item }}
       </div>
       <div
@@ -23,41 +27,89 @@
       >
         {{ item }}
       </div>
-      <div v-for="(item, index) in nextMonthSurplusDayArray" :key="index" class="grid-item">
+      <div
+        v-for="(item, index) in nextMonthSurplusDayArray"
+        :key="index"
+        class="grid-item"
+      >
         {{ item }}
       </div>
     </div>
-  </div>
-
-  <div class="container mx-auto calendar mt-5">
-    <div class="flex flex-wrap">
-      <span class="mt-3"> Available start times</span>
-      <div class="flex text-center">
-        <div style="margin: 40px 20px" class="" v-for="(section, index) in timeSections" :key="index">
-          <div class="">
-            <h4>{{ section.label }}</h4>
-            <button
-              v-for="(item, i) in section.times"
-              :key="i"
-              @click="changeTime(section, i)"
-              class="button_style"
-              :disabled="item.status == 2"
-              :class="
-                item.status == 0
-                  ? 'background-color-status'
-                  : item.status == 1
-                  ? 'background-color-status1'
-                  : item.status == 2
-                  ? 'background-color-status2'
-                  : ' '
-              "
+    <div class="mt-5 flex mx-auto time-container  " style="">
+      <div class="mx-auto calendar mr-5" style="height:150px;width:250px">
+        <div class="p-3">
+          <span>Body Massage</span>
+          <div class="my-3 flex justify-items-center items-center">
+            <img
+              class="round-image"
+              style="width:50px;height:50px"
+              src="https://png.pngtree.com/thumb_back/fh260/background/20210907/pngtree-massage-and-health-care-during-the-day-image_811638.jpg"
+            />
+            <div class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="ml-2 h-8 w-10 "
+              >
+                <path
+                  d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span>$100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mx-auto calendar  flex">
+        <div class="flex flex-wrap">
+          <span class="mt-3"> Available start times</span>
+          <div class="flex text-center">
+            <div
+              style="margin: 40px 20px"
+              class=""
+              v-for="(section, index) in timeSections"
+              :key="index"
             >
-              {{ item.time }}
-            </button>
+              <div class="">
+                <h4>{{ section.label }}</h4>
+                <button
+                  v-for="(item, i) in section.times"
+                  :key="i"
+                  @click="$emit('selectTime', item)"
+                  class="button_style"
+                  :disabled="item.status == 2"
+                  :class="
+                    item.status == 0
+                      ? 'background-color-status'
+                      : item.status == 1
+                      ? 'background-color-status1'
+                      : item.status == 2
+                      ? 'background-color-status2'
+                      : ' '
+                  "
+                >
+                  {{ item.time }}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div>
+    <!-- <button
+      type="button"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+    >
+      預約
+    </button> -->
   </div>
 
   <!-- <div v-if="pending">Loading ...</div> -->
@@ -70,6 +122,10 @@ import { useRouter } from 'vue-router'
 
 // import { getStaffInfoByPage } from '@/api/test'
 import { googleTokenLogin } from 'vue3-google-login'
+const emit = defineEmits<{
+  (e: 'selectTime', id: number): void
+  (e: 'update', value: string): void
+}>()
 const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
 const { googleClientId: GOOGLE_CLIENT_ID }: any = runtimeConfig.public
@@ -96,7 +152,7 @@ const header = reactive<string[]>([
   'Wen',
   'Thu',
   'Fri',
-  'Sat',
+  'Sat'
 ])
 // const header = reactive<string[]>(['一', '二', '三', '四', '五', '六', '日'])
 // 上个月剩余天数
@@ -112,9 +168,35 @@ const currentMonth = ref<number>(0)
 const currentDate = ref<number>(0)
 
 // 闰年
-const leapMonthDay = reactive<number[]>([31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
+const leapMonthDay = reactive<number[]>([
+  31,
+  29,
+  31,
+  30,
+  31,
+  30,
+  31,
+  31,
+  30,
+  31,
+  30,
+  31
+])
 // 平年
-const normalMonthDay = reactive<number[]>([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
+const normalMonthDay = reactive<number[]>([
+  31,
+  28,
+  31,
+  30,
+  31,
+  30,
+  31,
+  31,
+  30,
+  31,
+  30,
+  31
+])
 function goProductPage() {
   productPage.value = !productPage.value
   console.log('productPage')
@@ -135,7 +217,10 @@ function getMonthFirstDay(year: number, month: number) {
 // 计算日期
 function calculateDays() {
   // 获取本月第一天星期几(星期几就补多少个空)
-  lastMonthSurplusDay.value = getMonthFirstDay(currentYear.value, currentMonth.value)
+  lastMonthSurplusDay.value = getMonthFirstDay(
+    currentYear.value,
+    currentMonth.value
+  )
   // lastMonthSurplusDay.value =
   //   getMonthFirstDay(currentYear.value, currentMonth.value) === 0
   //     ? 6
@@ -156,10 +241,15 @@ function calculateDays() {
       : normalMonthDay[currentMonth.value - 2]
   }
   // 获取还需要渲染多少天
-  nextMonthSurplusDay.value = 42 - (lastMonthSurplusDay.value + currentMonthDayCount.value)
+  nextMonthSurplusDay.value =
+    42 - (lastMonthSurplusDay.value + currentMonthDayCount.value)
   const prevtemp = []
   const nexttemp = []
-  for (let i = prevMonthLastDate - lastMonthSurplusDay.value + 1; i <= prevMonthLastDate; i++) {
+  for (
+    let i = prevMonthLastDate - lastMonthSurplusDay.value + 1;
+    i <= prevMonthLastDate;
+    i++
+  ) {
     prevtemp.push(i)
   }
   for (let i = 1; i <= nextMonthSurplusDay.value; i++) {
@@ -197,7 +287,7 @@ function getCurrentDate() {
   return {
     year,
     month,
-    date,
+    date
   }
 }
 // 初始化日历
@@ -224,28 +314,33 @@ timeArr.value = [
   { time: '21:00', status: 0 },
   { time: '22:00', status: 0 },
   { time: '23:00', status: 0 },
-  { time: '24:00', status: 0 },
+  { time: '24:00', status: 0 }
 ]
 
 timeSections.value = [
   {
     label: 'morning',
-    times: timeArr.value.slice(0, 4),
+    times: timeArr.value.slice(0, 4)
   },
   {
     label: 'afternoon',
-    times: timeArr.value.slice(4, 8),
+    times: timeArr.value.slice(4, 8)
   },
   {
     label: 'evening',
-    times: timeArr.value.slice(8),
-  },
+    times: timeArr.value.slice(8)
+  }
 ]
+
+function changeTime(item, time) {
+  console.log('item', item)
+  console.log('time', time.time)
+}
 
 async function handleGoogleLogin() {
   const accessToken = await googleTokenLogin({
-    clientId: GOOGLE_CLIENT_ID,
-  }).then((response) => response?.access_token)
+    clientId: GOOGLE_CLIENT_ID
+  }).then(response => response?.access_token)
   console.log('accessToken', accessToken)
 
   if (!accessToken) {
@@ -258,12 +353,15 @@ async function handleGoogleLogin() {
   // await getGoogleUserInfo(data, accessToken as string)
 
   // userInfo.value = data.value
-  const { data, execute, pending } = await useFetch('/api/auth/google-auth-token', {
-    method: 'POST',
-    body: {
-      accessToken,
-    },
-  })
+  const { data, execute, pending } = await useFetch(
+    '/api/auth/google-auth-token',
+    {
+      method: 'POST',
+      body: {
+        accessToken
+      }
+    }
+  )
   console.log('logindata', data.value)
   router.push({ path: '/reservation' })
 }
@@ -344,6 +442,29 @@ onMounted(() => {
   border-left: 1px solid #eee;
   border-right: 1px solid #eee;
 }
+/* 
+@media (min-width: 640px) {
+  .time-container {
+    max-width: 640px;
+  }
+} */
+
+@media (min-width: 768px) {
+  .time-container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .time-container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .time-container {
+    max-width: 1280px;
+  }
+}
+
 .grid-item {
   width: 100%;
   height: 70px;
@@ -367,5 +488,8 @@ onMounted(() => {
 .calendar {
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
+}
+.round-image {
+  border-radius: 50%;
 }
 </style>

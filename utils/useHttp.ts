@@ -1,7 +1,14 @@
-import { hash } from 'ohash'
+// import { hash } from 'ohash'
 // import { checkStatus } from '@/api/helper/checkStatus'
 // import { getToken } from '@/api/user'
 import type { HttpResponse } from '@/api/interface'
+import { useLoadingStore } from '~/stores/index'
+
+function changeLoading() {
+  const loadingState = useLoadingStore()
+  console.log('changeLoading', loadingState)
+  loadingState.startLoading()
+}
 
 // 请求体拓展
 function configOptions(options: any = {}) {
@@ -36,13 +43,24 @@ const fetch = async (url: string, options?: object): Promise<any> => {
   return new Promise((resolve, reject) => {
     useFetch(reqUrl, {
       ...options,
+      onRequest({ request }) {
+        const loadingState = useLoadingStore()
+        console.log('changeLoading', loadingState)
+        loadingState.startLoading()
+      },
       onResponseError({ request, response, options }) {
+        const loadingState = useLoadingStore()
+        console.log('onResponseError')
+        loadingState.stopLoading()
         console.log('请求失败', response.status, options)
         reject(response)
       },
     })
       .then(({ data, error, refresh, status }) => {
         // 强制刷新数据，避免重复请求
+        const loadingState = useLoadingStore()
+        console.log('onResponseError')
+        loadingState.stopLoading()
         console.log('userFetch計算次數')
         // refresh()
         if (error.value) {

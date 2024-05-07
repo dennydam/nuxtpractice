@@ -1,15 +1,18 @@
 <script setup lang="ts">
 // const { data } = await useFetch('/server/api/hello')
 // console.log('data', data)
+// import { httpRequest } from '@/composables/useHttps'
 import { useUserStore } from '@/stores/user'
 import { appointmentPost } from '@/api/appointment'
 const { $notify }: any = useNuxtApp()
 const user = useUserStore()
+// console.log('composablesHttp', httpRequest)
 
 async function testApi() {
-  const { data } = await useFetch('/api/endpointTest', {
-    method: 'POST',
-  })
+  // const { data } = await useFetch('/api/endpointTest', {
+  //   method: 'POST'
+  // })
+  const { data } = await appointmentPost()
   console.log('testData', data)
 
   // try {
@@ -35,7 +38,7 @@ async function appTest() {
       method: 'POST',
       body: {
         name: 'test',
-        time: '2022-10-10 10:10:10',
+        time: '2022-10-10 10:10:10'
       },
       onResponse({ request, response, options }) {
         console.log('onResponse', response)
@@ -44,32 +47,21 @@ async function appTest() {
           $notify({
             type: 'success',
             title: 'Notification Title',
-            text: 'Notification Text',
+            text: 'Notification Text'
+          })
+        } else if (response.status == 200) {
+          $notify({
+            type: 'success',
+            title: '預約成功',
+            text: '預約成功'
           })
         }
-        // console.log('onResponse', request)
-        // console.log('onResponse', options)
-      },
+      }
     })
     // console.log('statusCode', pending.value)
-    // 处理返回的数据
   } catch (error) {
-    // 处理错误
     console.error('An error occurred:', error)
   }
-
-  // console.log('data.value', data.value)
-  // if (data.value.statusCode === 400) {
-  //   $notify({
-  //     type: 'success',
-  //     title: 'Notification Title',
-  //     text: 'Notification Text',
-  //   })
-  // }
-  // if (data.value) {
-  //   console.log('data', data.value)
-  // }
-  // console.log('appdata', data)
 }
 
 async function getApppTest() {
@@ -90,8 +82,8 @@ async function deleteAppTest() {
   const { data, error } = await useFetch('/api/appointment', {
     method: 'DELETE',
     body: {
-      id: 1,
-    },
+      id: 1
+    }
   })
   if (error) {
     console.log('error', error.value)

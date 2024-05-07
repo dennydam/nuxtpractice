@@ -2,14 +2,14 @@ import { Connection } from 'tedious'
 import { Request } from 'tedious'
 import { defineEventHandler, readBody, createError } from 'h3'
 
-export default defineNitroPlugin((nitroApp) => {
+export default defineNitroPlugin((nitro) => {
   var config = {
-    server: 'DESKTOP-AO0HJH8', //update me
+    server: 'DESKTOP-JSLVL3F', //update me
     authentication: {
       type: 'default',
       options: {
         userName: 'sa', //update me
-        domain: 'DESKTOP-AO0HJH8', //update me
+        domain: 'DESKTOP-JSLVL3F', //update me
         password: '3939889',
         // password: 'cindydenny',
       },
@@ -18,7 +18,7 @@ export default defineNitroPlugin((nitroApp) => {
       // If you are on Microsoft Azure, you need encryption:
       // instanceName: 'someinstance',
       // server: 'DESKTOP-AO0HJH8\\denny'
-      database: 'imsdb', //update me
+      database: 'sideprojectDB', //update me
       encrypt: false,
       // trustedConnection: true,
       // trustServerCertificate: true, // Add this line
@@ -37,8 +37,9 @@ export default defineNitroPlugin((nitroApp) => {
         console.error('Error connecting to database:', err.message)
         // Handle the error or retry connection
       } else {
+        nitro.db = connection
+        // nitro.db = connection
         console.log('Connected to databaseNITROO連到拉')
-        nitroApp.db = connection
         executeStatement()
       }
     })
@@ -46,9 +47,10 @@ export default defineNitroPlugin((nitroApp) => {
   connection.connect()
 
   connectToDatabase() // 初始化連線
+  // executeStatement()
 
   function executeStatement() {
-    var request = new Request('SELECT * FROM Appointment;', function (err) {
+    var request = new Request('SELECT * FROM [User]', function (err) {
       if (err) {
         console.log(err)
       }
@@ -62,13 +64,13 @@ export default defineNitroPlugin((nitroApp) => {
           result += column.value + ' '
         }
       })
-      console.log(result)
+      console.log('result', result)
       result = ''
     })
 
-    request.on('done', function (rowCount, more) {
-      console.log(rowCount + ' rows returned')
-    })
+    // request.on('done', function (rowCount, more) {
+    //   console.log(rowCount + ' rows returned')
+    // })
 
     // Close the connection after the final event emitted by the request, after the callback passes
     request.on('requestCompleted', function (rowCount, more) {

@@ -1,17 +1,25 @@
 <template>
-  <div class="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div
+    class="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+  >
     <div class="w-full max-w-md">
       <div class="flex flex-col items-center">
         <NuxtLink to="/">
           <!-- <Icon name="logos:nuxt-icon" size="80" /> -->
         </NuxtLink>
-        <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-700">登入帳號</h2>
+        <h2
+          class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-700"
+        >
+          登入帳號
+        </h2>
       </div>
       <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form class="space-y-6" @submit.prevent="handleEmailLogin">
             <div>
-              <label for="email" class="block text-sm font-medium text-gray-700">電子信箱</label>
+              <label for="email" class="block text-sm font-medium text-gray-700"
+                >電子信箱</label
+              >
               <div class="mt-1">
                 <input
                   id="email"
@@ -25,7 +33,11 @@
               </div>
             </div>
             <div>
-              <label for="password" class="block text-sm font-medium text-gray-700">密碼</label>
+              <label
+                for="password"
+                class="block text-sm font-medium text-gray-700"
+                >密碼</label
+              >
               <div class="mt-1">
                 <input
                   id="password"
@@ -89,7 +101,9 @@
                   </g>
                 </svg>
               </div>
-              <span class="text-slate-500 group-hover:text-slate-600">使用 Google 繼續</span>
+              <span class="text-slate-500 group-hover:text-slate-600"
+                >使用 Google 繼續</span
+              >
             </button>
             <button
               type="button"
@@ -97,11 +111,13 @@
               @click="
                 navigateTo({
                   path: '/register',
-                  query: { redirect_to: $route.query.redirect_to },
+                  query: { redirect_to: $route.query.redirect_to }
                 })
               "
             >
-              <span class="text-slate-500 group-hover:text-slate-600">使用電子信箱註冊</span>
+              <span class="text-slate-500 group-hover:text-slate-600"
+                >使用電子信箱註冊</span
+              >
             </button>
           </div>
         </div>
@@ -119,7 +135,12 @@
         aria-haspopup="true"
       >
         Options
-        <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <svg
+          class="-mr-1 h-5 w-5 text-gray-400"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
           <path
             fill-rule="evenodd"
             d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
@@ -148,13 +169,28 @@
     >
       <div class="py-1" role="none">
         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0"
+        <a
+          href="#"
+          class="text-gray-700 block px-4 py-2 text-sm"
+          role="menuitem"
+          tabindex="-1"
+          id="menu-item-0"
           >Account settings</a
         >
-        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1"
+        <a
+          href="#"
+          class="text-gray-700 block px-4 py-2 text-sm"
+          role="menuitem"
+          tabindex="-1"
+          id="menu-item-1"
           >Support</a
         >
-        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2"
+        <a
+          href="#"
+          class="text-gray-700 block px-4 py-2 text-sm"
+          role="menuitem"
+          tabindex="-1"
+          id="menu-item-2"
           >License</a
         >
         <form method="POST" action="#" role="none">
@@ -175,7 +211,7 @@
 
 <script setup>
 definePageMeta({
-  layout: false,
+  layout: false
 })
 
 import { googleTokenLogin } from 'vue3-google-login'
@@ -189,7 +225,7 @@ const { googleClientId: GOOGLE_CLIENT_ID } = runtimeConfig.public
 const router = useRouter()
 const loginData = reactive({
   email: '',
-  password: '',
+  password: ''
 })
 
 // const handleEmailLogin = async () => {
@@ -205,8 +241,8 @@ const loginData = reactive({
 
 const handleGoogleLogin = async () => {
   const accessToken = await googleTokenLogin({
-    clientId: GOOGLE_CLIENT_ID,
-  }).then((response) => response?.access_token)
+    clientId: GOOGLE_CLIENT_ID
+  }).then(response => response?.access_token)
 
   if (!accessToken) {
     return '登入失敗'
@@ -220,9 +256,9 @@ const handleGoogleLogin = async () => {
   // })
 
   const { data, error } = await userStore.googleLogin({
-    accessToken,
+    accessToken
   })
-  // console.log('會員資料', data.value)
+  console.log('會員資料', data.value)
 
   if (data.value) {
     // pushNotify('success', '登入成功', '請等待頁面自動跳轉')

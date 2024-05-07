@@ -1,14 +1,9 @@
 import { OAuth2Client } from 'google-auth-library'
-import jwt from 'jsonwebtoken'
-import { defineEventHandler, setCookie, readBody, createError } from 'h3'
+import { userLogin } from '../../controller/user'
+
+// import jwt from 'jsonwebtoken'
+import { defineEventHandler, setCookie, readBody, createError, message } from 'h3'
 import { PrismaClient } from '@prisma/client'
-// import { getCookie, setCookie } from 'typescript-cookie'
-import user from '../../db/user'
-const runtimeConfig = useRuntimeConfig()
-
-// let runtimeConfig = useRuntimeConfig()
-
-const prisma = new PrismaClient()
 
 // console.log('prisma', prisma)
 export default defineEventHandler(async (event) => {
@@ -35,60 +30,65 @@ export default defineEventHandler(async (event) => {
   }
   //下列db.user typescript 會報錯誤
 
-  let userRecord = await user.getUserByEmail({
-    email: userInfo.email,
-  })
-
-  if (userRecord) {
-    if ((userRecord.providerName === 'google' && userRecord.providerUserId === userInfo.sub) === false) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'This email address does not apply to this login method',
-      })
-    }
-    console.log('有有喔有創過了', userRecord)
-  } else {
-    userRecord = await user.createUser({
-      providerName: 'google',
-      providerUserId: userInfo.sub,
-      nickname: userInfo.name,
+  try {
+    let userRecord = await userLogin(userInfo)
+    console.log('userRecord', userRecord)
+    return {
+      id: userInfo.sub,
+      provider: {
+        name: userInfo.name,
+      },
+      nickname: userInfo.given_name,
       email: userInfo.email,
-      password: null,
-      avatar: userInfo.picture,
-      emailVerified: userInfo.email_verified,
-    })
+    }
+    // return userRecord
+  } catch (error) {
+    console.log('登入錯誤', error)
+    // throw createError({
+    //   statusCode: 500,
+    //   statusMessage: 'user登入過程出錯',
+    // })
   }
+
+  // let userRecord = await user.getUserByEmail({
+  //   email: userInfo.email,
+  // })
+
+  // if (userRecord) {
+  //   if ((userRecord.providerName === 'google' && userRecord.providerUserId === userInfo.sub) === false) {
+  //     throw createError({
+  //       statusCode: 400,
+  //       statusMessage: 'This email address does not apply to this login method',
+  //     })
+  //   }
+  //   console.log('有有喔有創過了', userRecord)
+  // } else {
+  //   userRecord = await user.createUser({
+  //     providerName: 'google',
+  //     providerUserId: userInfo.sub,
+  //     nickname: userInfo.name,
+  //     email: userInfo.email,
+  //     password: null,
+  //     avatar: userInfo.picture,
+  //     emailVerified: userInfo.email_verified,
+  //   })
+  // }
   const jwtTokenPayload = {
     id: userRecord.id,
   }
 
   // const maxAge = 60 * 60 * 24 * 7
-  const maxAge = 300 // 五分鐘的秒數
-  const expires = Math.floor(Date.now() / 1000) + maxAge
-  // console.log('jwtTokenPayload', jwtTokenPayload)
-  // const config = useRuntimeConfig()
+  // const maxAge = 300 // 五分鐘的秒數
+  // const expires = Math.floor(Date.now() / 1000) + maxAge
 
-  const jwtToken = jwt.sign(
-    {
-      exp: expires,
-      data: jwtTokenPayload,
-    },
-    'testttttttt'
-  )
-  console.log('jewtoken', jwtToken)
-  // let counter = getCookie(event, 'counter') || 0
+  // const jwtToken = jwt.sign(
+  //   {
+  //     exp: expires,
+  //     data: jwtTokenPayload,
+  //   },
+  //   'testttttttt'
+  // )
+  // console.log('jewtoken', jwtToken)
 
-  // Increase counter cookie by 1
-  setCookie(event, 'counter', '333333')
-
-  return {
-    id: userRecord.id,
-    provider: {
-      name: userRecord.providerName,
-      userId: userRecord.providerUserId,
-    },
-    nickname: userRecord.nickname,
-    avatar: userRecord.avatar,
-    email: userRecord.email,
-  }
+  // setCookie(event, 'counter', '333333')
 })

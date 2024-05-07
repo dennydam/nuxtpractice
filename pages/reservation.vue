@@ -91,140 +91,22 @@
       >
     </li>
     <li>
-      <a class="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">Disabled</a>
+      <a
+        class="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500"
+        >Disabled</a
+      >
     </li>
   </ul>
 
-  <!-- <form>
-    <div class="space-y-12">
-      <div class="border-b border-gray-900/10 pb-12">
-        <h2 class="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
-
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          <div class="sm:col-span-3">
-            <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
-            <div class="mt-2">
-              <input
-                type="text"
-                name="first-name"
-                id="first-name"
-                autocomplete="given-name"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-3">
-            <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
-            <div class="mt-2">
-              <input
-                type="text"
-                name="last-name"
-                id="last-name"
-                autocomplete="family-name"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-4">
-            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-            <div class="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-3">
-            <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Country</label>
-            <div class="mt-2">
-              <select
-                id="country"
-                name="country"
-                autocomplete="country-name"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-              >
-                <option>United States</option>
-                <option>Canada</option>
-                <option>Mexico</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="col-span-full">
-            <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Street address</label>
-            <div class="mt-2">
-              <input
-                type="text"
-                name="street-address"
-                id="street-address"
-                autocomplete="street-address"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2 sm:col-start-1">
-            <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
-            <div class="mt-2">
-              <input
-                type="text"
-                name="city"
-                id="city"
-                autocomplete="address-level2"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2">
-            <label for="region" class="block text-sm font-medium leading-6 text-gray-900">State / Province</label>
-            <div class="mt-2">
-              <input
-                type="text"
-                name="region"
-                id="region"
-                autocomplete="address-level1"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2">
-            <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal code</label>
-            <div class="mt-2">
-              <input
-                type="text"
-                name="postal-code"
-                id="postal-code"
-                autocomplete="postal-code"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-6 flex items-center justify-end gap-x-6">
-      <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-      <button
-        type="submit"
-        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >
-        Save
-      </button>
-    </div>
-  </form> -->
-  <!-- <button @click="testApi">77</button> -->
   <ReservationItem v-if="productPage" @selectItem="selectItem" />
-  <ReservationTime v-if="timePage" />
+  <ReservationTime v-if="timePage" @selectTime="selectTime" />
+  <button
+    type="button"
+    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+    @click="addAppointment"
+  >
+    預約
+  </button>
 
   <!-- <div v-if="pending">Loading ...</div> -->
 </template>
@@ -234,6 +116,9 @@ import ReservationItem from '@/components/ReservationItem.vue'
 import ReservationTime from '@/components/ReservationTime.vue'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+// import { Appointment } from '@/utils/types'
+// const userAppointmentData = ref<Appointment[]>([])
 
 // import { getStaffInfoByPage } from '@/api/test'
 import { googleTokenLogin } from 'vue3-google-login'
@@ -245,6 +130,8 @@ const productPage = ref<boolean>(false)
 const timePage = ref<boolean>(false)
 
 //預約相關
+const appointmentItem = ref<any>()
+const appointmentTime = ref<any>()
 const timeSections = ref<any[]>([])
 const timeArr = ref<any[]>()
 
@@ -265,30 +152,110 @@ const header = reactive<string[]>([
   'Wen',
   'Thu',
   'Fri',
-  'Sat',
+  'Sat'
 ])
 // const header = reactive<string[]>(['一', '二', '三', '四', '五', '六', '日'])
-// 上个月剩余天数
+// 上個月剩餘天數
 const lastMonthSurplusDay = ref<number>(0)
 const lastMonthSurplusDayArray = ref<number[]>([])
-// 下个月剩余天数
+// 下個月剩餘天數
 const nextMonthSurplusDay = ref<number>(0)
 const nextMonthSurplusDayArray = ref<number[]>([])
-// 当前月份总天数
+// 當前月份總天數
 const currentMonthDayCount = ref<number>(0)
 const currentYear = ref<number>(0)
 const currentMonth = ref<number>(0)
 const currentDate = ref<number>(0)
 
-// 闰年
-const leapMonthDay = reactive<number[]>([31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
+// 閏年
+const leapMonthDay = reactive<number[]>([
+  31,
+  29,
+  31,
+  30,
+  31,
+  30,
+  31,
+  31,
+  30,
+  31,
+  30,
+  31
+])
 // 平年
-const normalMonthDay = reactive<number[]>([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
-
-function selectItem() {
+const normalMonthDay = reactive<number[]>([
+  31,
+  28,
+  31,
+  30,
+  31,
+  30,
+  31,
+  31,
+  30,
+  31,
+  30,
+  31
+])
+//選擇產品
+function selectItem(item) {
+  console.log('item.value', item)
+  appointmentItem.value = item
   productPage.value = false
   timePage.value = true
   console.log('selectItem')
+}
+//選擇時間
+function selectTime(time) {
+  console.log('選擇時間', time)
+  appointmentTime.value = time
+}
+
+//確認預約
+async function addAppointment() {
+  // 獲取當前日期
+  const currentDate = new Date()
+
+  // 獲取年、月、日
+  const year = currentDate.getFullYear()
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0') // 因為 getMonth() 返回的月份從 0 開始，所以需要加 1
+  const day = String(currentDate.getDate()).padStart(2, '0')
+  const dateString = `${year}-${month}-${day}`
+
+  const treatment = appointmentItem.value.title
+  const reservationTime = dateString + 'T' + appointmentTime.value.time
+
+  console.log('今日日期', dateString) // 例如：2024-04-30
+
+  try {
+    const { data } = await useFetch('/api/appointment/', {
+      method: 'POST',
+      body: {
+        treatment: treatment,
+        appointmentTime: reservationTime
+      },
+      onResponse({ request, response, options }) {
+        console.log('onResponse', response)
+        if (response.status == 400) {
+          console.log('抓')
+          $notify({
+            type: 'success',
+            title: 'Notification Title',
+            text: 'Notification Text'
+          })
+        } else if (response.status == 200) {
+          $notify({
+            type: 'success',
+            title: '預約成功',
+            text: '預約成功'
+          })
+        }
+      }
+    })
+    // console.log('statusCode', pending.value)
+  } catch (error) {
+    console.error('An error occurred:', error)
+  }
 }
 function goProductPage() {
   timePage.value = false
@@ -317,7 +284,10 @@ function getMonthFirstDay(year: number, month: number) {
 // 计算日期
 function calculateDays() {
   // 获取本月第一天星期几(星期几就补多少个空)
-  lastMonthSurplusDay.value = getMonthFirstDay(currentYear.value, currentMonth.value)
+  lastMonthSurplusDay.value = getMonthFirstDay(
+    currentYear.value,
+    currentMonth.value
+  )
   // lastMonthSurplusDay.value =
   //   getMonthFirstDay(currentYear.value, currentMonth.value) === 0
   //     ? 6
@@ -338,10 +308,15 @@ function calculateDays() {
       : normalMonthDay[currentMonth.value - 2]
   }
   // 获取还需要渲染多少天
-  nextMonthSurplusDay.value = 42 - (lastMonthSurplusDay.value + currentMonthDayCount.value)
+  nextMonthSurplusDay.value =
+    42 - (lastMonthSurplusDay.value + currentMonthDayCount.value)
   const prevtemp = []
   const nexttemp = []
-  for (let i = prevMonthLastDate - lastMonthSurplusDay.value + 1; i <= prevMonthLastDate; i++) {
+  for (
+    let i = prevMonthLastDate - lastMonthSurplusDay.value + 1;
+    i <= prevMonthLastDate;
+    i++
+  ) {
     prevtemp.push(i)
   }
   for (let i = 1; i <= nextMonthSurplusDay.value; i++) {
@@ -379,7 +354,7 @@ function getCurrentDate() {
   return {
     year,
     month,
-    date,
+    date
   }
 }
 // 初始化日历
@@ -406,28 +381,28 @@ timeArr.value = [
   { time: '21:00', status: 0 },
   { time: '22:00', status: 0 },
   { time: '23:00', status: 0 },
-  { time: '24:00', status: 0 },
+  { time: '24:00', status: 0 }
 ]
 
 timeSections.value = [
   {
     label: '早上',
-    times: timeArr.value.slice(0, 4),
+    times: timeArr.value.slice(0, 4)
   },
   {
     label: '中午',
-    times: timeArr.value.slice(4, 8),
+    times: timeArr.value.slice(4, 8)
   },
   {
     label: '晚上',
-    times: timeArr.value.slice(8),
-  },
+    times: timeArr.value.slice(8)
+  }
 ]
 
 async function handleGoogleLogin() {
   const accessToken = await googleTokenLogin({
-    clientId: GOOGLE_CLIENT_ID,
-  }).then((response) => response?.access_token)
+    clientId: GOOGLE_CLIENT_ID
+  }).then(response => response?.access_token)
   console.log('accessToken', accessToken)
 
   if (!accessToken) {
@@ -440,20 +415,43 @@ async function handleGoogleLogin() {
   // await getGoogleUserInfo(data, accessToken as string)
 
   // userInfo.value = data.value
-  const { data, execute, pending } = await useFetch('/api/auth/google-auth-token', {
-    method: 'POST',
-    body: {
-      accessToken,
-    },
-  })
+  const { data, execute, pending } = await useFetch(
+    '/api/auth/google-auth-token',
+    {
+      method: 'POST',
+      body: {
+        accessToken
+      }
+    }
+  )
   console.log('logindata', data.value)
   router.push({ path: '/reservation' })
 }
 // function mounted() {
 //   initCalendar()
 // }
-onMounted(() => {
+onBeforeMount(async () => {
   initCalendar()
+  const userStore = useUserStore()
+
+  console.log('userState', userStore.profile.id)
+  const userId = userStore.profile.id
+
+  // const { data: response, error } = useAsyncData(async () => {
+  //   try {
+  //     const { data } = await useFetch('/api/userappointment/', {
+  //       method: 'POST',
+  //       body: {
+  //         userId: userId
+  //       }
+  //     })
+  //     userAppointmentData.value = data.value.data
+  //     console.log('會員預約資料data', data.value.data[0])
+  //   } catch (error) {
+  //     console.error('An error occurred:', error)
+  //     return null
+  //   }
+  // })
 })
 </script>
 

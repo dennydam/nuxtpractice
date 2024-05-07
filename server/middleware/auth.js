@@ -3,18 +3,15 @@ import jwt from 'jsonwebtoken'
 const runtimeConfig = useRuntimeConfig()
 
 export default defineEventHandler((event) => {
-  console.log('server/middleware/auth.js')
   const jwtToken = getCookie(event, 'access_token')
 
   if (!jwtToken) {
     return
   }
-
   let userInfo = null
 
   try {
     const { data } = jwt.verify(jwtToken, runtimeConfig.jwtSignSecret)
-
     userInfo = data
     if (userInfo?.id) {
       event.context.auth = {

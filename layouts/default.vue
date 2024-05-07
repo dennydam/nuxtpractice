@@ -27,7 +27,11 @@
                 stroke="currentColor"
                 aria-hidden="true"
               >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
               </svg>
               <!--
             Icon when menu is open.
@@ -51,7 +55,9 @@
             </svg> -->
             </button>
           </div>
-          <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div
+            class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
+          >
             <div class="flex items-center">
               <img
                 class="test-bg h-10 w-auto"
@@ -87,10 +93,13 @@
               </div>
             </div>
           </div>
-          <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div
+            class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 notification-button"
+          >
             <button
               type="button"
               class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              @click="toggleModal"
             >
               <span class="absolute -inset-1.5"></span>
               <span class="sr-only">View notifications</span>
@@ -109,6 +118,7 @@
                 />
               </svg>
             </button>
+            <span class="notification-badge">3</span>
 
             <!-- Profile dropdown -->
             <div class="relative ml-3"></div>
@@ -117,7 +127,11 @@
       </div>
 
       <!-- Mobile menu, show/hide based on menu state. -->
-      <div class="sm:hidden" :class="open ? 'block' : 'hidden'" id="mobile-menu">
+      <div
+        class="sm:hidden"
+        :class="open ? 'block' : 'hidden'"
+        id="mobile-menu"
+      >
         <div class="space-y-1 px-2 pb-3 pt-2">
           <a
             href="#"
@@ -143,9 +157,7 @@
         </div>
       </div>
     </nav>
-    <!-- <div class="img-container" style="height: 50%">
-      <img class="img-fluid" src="../public/towfiqu-barbhuiya-jbjmimlaC-U-unsplash.jpg" alt="Your Image" />
-    </div> -->
+
     <section
       class=""
       style="
@@ -158,15 +170,90 @@
     <!-- background-image: url(/uploads/simplebeautydemo/image_files/background/0fbed59ed6ab3bacd565f376b50746f1.jpg); background-size: cover;background-position: center; -->
 
     <slot />
+
+    <!-- 彈出視窗 -->
+    <div
+      v-if="isModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50"
+    >
+      <!-- 視窗內容 -->
+      <div
+        v-for="item in userAppointmentData"
+        :key="item.id"
+        class="bg-white p-8 rounded-md shadow-lg"
+      >
+        <!-- 視窗標題 -->
+        <h2 class="text-lg font-semibold mb-4">
+          您的預約 {{ item.treatment }}
+        </h2>
+        <!-- 視窗內容 -->
+        <p class="text-gray-700">
+          您有 {{ userAppointmentData.length }} 筆預約.
+        </p>
+        <!-- 預約時間 -->
+        <p class="text-gray-700">您有 {{ item.appointmentTime }} 筆預約.</p>
+        <button
+          type="button"
+          @click="toggleModal"
+          class="mt-4 bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+        >
+          Close
+        </button>
+      </div>
+    </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useUserStore } from '@/stores/user'
 const open = ref(false)
+const userAppointmentData = ref<Appointment[]>([])
+// const appointmentTime =
+
+const isModalOpen = ref(false)
+function toggleModal() {
+  isModalOpen.value = !isModalOpen.value
+}
 
 function toggle() {
   console.log('toogle')
   open.value = !open.value
 }
+onMounted(() => {
+  const userStore = useUserStore()
+
+  console.log('userState', userStore.profile.id)
+  const userId = userStore.profile.id
+  const { data: response, error } = useAsyncData(async () => {
+    try {
+      const { data } = await useFetch('/api/userappointment/', {
+        method: 'POST',
+        body: {
+          userId: userId
+        }
+      })
+      userAppointmentData.value = data.value.data
+      userAppointmentData.value.forEach(item => {
+        let dateTimeString = item.appointmentTime
+        const dateTime = new Date(dateTimeString)
+
+        item.appointmentTime = dateTime.toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        })
+        console.log(item.appointmentTime)
+      })
+      console.log('會員預約資料data', data.value.data[0])
+    } catch (error) {
+      console.error('An error occurred:', error)
+      return null
+    }
+  })
+})
 </script>
 <style>
 .img-container img {
@@ -178,5 +265,26 @@ function toggle() {
 .test-bg {
   background: none !important;
   background-color: transparent !important;
+}
+
+/* 按鈕的父級容器 */
+.notification-button {
+  position: relative; /* 設置為相對定位 */
+}
+
+/* 通知數量提醒的樣式 */
+.notification-badge {
+  position: absolute; /* 設置為絕對定位 */
+  top: -6px; /* 從上方偏移 */
+  right: -2px; /* 從右側偏移 */
+  background-color: red; /* 背景顏色 */
+  color: white; /* 文字顏色 */
+  border-radius: 999px; /* 圓形邊框半徑 */
+  width: 20px; /* 寬度 */
+  height: 20px; /* 高度 */
+  font-size: 12px; /* 文字大小 */
+  display: flex; /* 設置為彈性盒子，使內容居中 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
 }
 </style>

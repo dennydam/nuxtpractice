@@ -1,7 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // import { defineNuxtConfig } from 'nuxt'
+const path = require('path')
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  nitro: {
+    output: {
+      publicDir: path.join(__dirname, 'docs'),
+    },
+  },
+  app: {
+    baseURL: '/nuxtpractice/',
+    buildAssetsDir: 'nuxt_assets',
+  },
   runtimeConfig: {
     public: {
       googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
@@ -19,9 +29,6 @@ export default defineNuxtConfig({
     // '@kyvg/vue3-notification',
     // '~/plugins/database.js',
   ],
-  nitro: {
-    // plugins: ['~/plugins/database.js'],
-  },
   // plugins: ['~/plugins/database.js'],
   // headlessui: {
   //   prefix: 'Headless',
