@@ -79,14 +79,14 @@
     <li class="me-2">
       <a
         href="#"
-        class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+        class="inline-block p-4 rounded-t-lg cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"
         >Settings</a
       >
     </li>
     <li class="me-2">
       <a
         href="#"
-        class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+        class="inline-block p-4 rounded-t-lg cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"
         >Contacts</a
       >
     </li>
@@ -99,15 +99,20 @@
   </ul>
 
   <ReservationItem v-if="productPage" @selectItem="selectItem" />
-  <ReservationTime v-if="timePage" @selectTime="selectTime" />
-  <button
-    type="button"
-    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-    @click="addAppointment"
-  >
-    預約
-  </button>
 
+  <ReservationTime v-if="timePage" @selectTime="selectTime" />
+  <div
+    v-if="timePage"
+    class="time-container mx-auto  flex justify-between my-2"
+  >
+    <button
+      type="button"
+      class="bg-[#ffadc4] text-white  hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ml-auto"
+      @click="addAppointment"
+    >
+      Book Now
+    </button>
+  </div>
   <!-- <div v-if="pending">Loading ...</div> -->
 </template>
 <script setup lang="ts">
@@ -135,68 +140,6 @@ const appointmentTime = ref<any>()
 const timeSections = ref<any[]>([])
 const timeArr = ref<any[]>()
 
-const dateChose = ref()
-
-//calendar
-const header = reactive<string[]>([
-  'Sun',
-  'Mon',
-  'Tue',
-  'Wen',
-  'Thu',
-  'Fri',
-  'Sat',
-  'Sun',
-  'Mon',
-  'Tue',
-  'Wen',
-  'Thu',
-  'Fri',
-  'Sat'
-])
-// const header = reactive<string[]>(['一', '二', '三', '四', '五', '六', '日'])
-// 上個月剩餘天數
-const lastMonthSurplusDay = ref<number>(0)
-const lastMonthSurplusDayArray = ref<number[]>([])
-// 下個月剩餘天數
-const nextMonthSurplusDay = ref<number>(0)
-const nextMonthSurplusDayArray = ref<number[]>([])
-// 當前月份總天數
-const currentMonthDayCount = ref<number>(0)
-const currentYear = ref<number>(0)
-const currentMonth = ref<number>(0)
-const currentDate = ref<number>(0)
-
-// 閏年
-const leapMonthDay = reactive<number[]>([
-  31,
-  29,
-  31,
-  30,
-  31,
-  30,
-  31,
-  31,
-  30,
-  31,
-  30,
-  31
-])
-// 平年
-const normalMonthDay = reactive<number[]>([
-  31,
-  28,
-  31,
-  30,
-  31,
-  30,
-  31,
-  31,
-  30,
-  31,
-  30,
-  31
-])
 //選擇產品
 function selectItem(item) {
   console.log('item.value', item)
@@ -206,9 +149,27 @@ function selectItem(item) {
   console.log('selectItem')
 }
 //選擇時間
-function selectTime(time) {
+function selectTime(time, currentYear, currentMonth, currentDate) {
   console.log('選擇時間', time)
-  appointmentTime.value = time
+  console.log('YEar', currentYear)
+
+  console.log('YEar', currentYear.toString())
+  console.log('Mohth', currentMonth)
+
+  const paddedMonth = currentMonth.toString().padStart(2, '0')
+  console.log('Month:', paddedMonth) // 输出 '04'
+  const paddedDate = currentDate.toString().padStart(2, '0')
+
+  console.log('Date', currentDate)
+
+  appointmentTime.value =
+    currentYear.toString() +
+    '-' +
+    paddedMonth +
+    '-' +
+    paddedDate +
+    ' ' +
+    time.time
 }
 
 //確認預約
@@ -223,14 +184,20 @@ async function addAppointment() {
   const dateString = `${year}-${month}-${day}`
 
   const treatment = appointmentItem.value.title
-  const reservationTime = dateString + 'T' + appointmentTime.value.time
+  // const reservationTime = dateString + 'T' + appointmentTime.value.time
+  const reservationTime = appointmentTime.value
 
-  console.log('今日日期', dateString) // 例如：2024-04-30
+  console.log('今日日期', reservationTime) // 例如：2024-04-30
+  const userStore = useUserStore()
+
+  console.log('userState', userStore.profile.id)
+  const userId = userStore.profile.id
 
   try {
     const { data } = await useFetch('/api/appointment/', {
       method: 'POST',
       body: {
+        userId: userId,
         treatment: treatment,
         appointmentTime: reservationTime
       },
@@ -269,82 +236,12 @@ function goTimePage() {
   console.log('timePage', timePage.value)
 }
 
-function selectDate(item: any) {
-  currentDate.value = item
-  console.log('item', item)
-}
-// 是否为闰年
-function isLeapYear(year: number) {
-  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
-}
-// 获取这个月1号的星期数
-function getMonthFirstDay(year: number, month: number) {
-  return new Date(year, month - 1, 1).getDay()
-}
-// 计算日期
-function calculateDays() {
-  // 获取本月第一天星期几(星期几就补多少个空)
-  lastMonthSurplusDay.value = getMonthFirstDay(
-    currentYear.value,
-    currentMonth.value
-  )
-  // lastMonthSurplusDay.value =
-  //   getMonthFirstDay(currentYear.value, currentMonth.value) === 0
-  //     ? 6
-  //     : getMonthFirstDay(currentYear.value, currentMonth.value) - 1
-  // 获取当前月有多少天
-  currentMonthDayCount.value = isLeapYear(currentYear.value)
-    ? leapMonthDay[currentMonth.value - 1]
-    : normalMonthDay[currentMonth.value - 1]
-  let prevMonthLastDate = 0
-  if (currentMonth.value === 1) {
-    // 当前是1月还要用去年的去判断
-    prevMonthLastDate = isLeapYear(currentYear.value - 1)
-      ? leapMonthDay[leapMonthDay.length - 1]
-      : normalMonthDay[normalMonthDay.length - 1]
-  } else {
-    prevMonthLastDate = isLeapYear(currentYear.value)
-      ? leapMonthDay[currentMonth.value - 2]
-      : normalMonthDay[currentMonth.value - 2]
-  }
-  // 获取还需要渲染多少天
-  nextMonthSurplusDay.value =
-    42 - (lastMonthSurplusDay.value + currentMonthDayCount.value)
-  const prevtemp = []
-  const nexttemp = []
-  for (
-    let i = prevMonthLastDate - lastMonthSurplusDay.value + 1;
-    i <= prevMonthLastDate;
-    i++
-  ) {
-    prevtemp.push(i)
-  }
-  for (let i = 1; i <= nextMonthSurplusDay.value; i++) {
-    nexttemp.push(i)
-  }
-  lastMonthSurplusDayArray.value = prevtemp
-  nextMonthSurplusDayArray.value = nexttemp
-}
-// 上个月
-function preMonth() {
-  if (currentMonth.value === 1) {
-    currentMonth.value = 12
-    --currentYear.value
-  } else {
-    --currentMonth.value
-  }
-  calculateDays()
-}
-// 下个月
-function nextMonth() {
-  if (currentMonth.value === 12) {
-    currentMonth.value = 1
-    ++currentYear.value
-  } else {
-    ++currentMonth.value
-  }
-  calculateDays()
-}
+// function selectDate(item: any) {
+//   // currentDate.value = item
+//   // console.log('item', item)
+//   console.log('Date', item)
+// }
+
 // 获取当前日期
 function getCurrentDate() {
   const d = new Date()
@@ -357,47 +254,6 @@ function getCurrentDate() {
     date
   }
 }
-// 初始化日历
-function initCalendar() {
-  const { year, month, date } = getCurrentDate()
-  currentYear.value = year
-  currentMonth.value = month
-  currentDate.value = date
-  calculateDays()
-}
-
-timeArr.value = [
-  { time: '10:00', status: 3 },
-  { time: '11:00', status: 0 },
-  { time: '12:00', status: 0 },
-  { time: '13:00', status: 1 },
-  { time: '14:00', status: 2 },
-  { time: '15:00', status: 0 },
-  { time: '16:00', status: 3 },
-  { time: '17:00', status: 0 },
-  { time: '18:00', status: 0 },
-  { time: '19:00', status: 0 },
-  { time: '20:00', status: 2 },
-  { time: '21:00', status: 0 },
-  { time: '22:00', status: 0 },
-  { time: '23:00', status: 0 },
-  { time: '24:00', status: 0 }
-]
-
-timeSections.value = [
-  {
-    label: '早上',
-    times: timeArr.value.slice(0, 4)
-  },
-  {
-    label: '中午',
-    times: timeArr.value.slice(4, 8)
-  },
-  {
-    label: '晚上',
-    times: timeArr.value.slice(8)
-  }
-]
 
 async function handleGoogleLogin() {
   const accessToken = await googleTokenLogin({
@@ -431,7 +287,7 @@ async function handleGoogleLogin() {
 //   initCalendar()
 // }
 onBeforeMount(async () => {
-  initCalendar()
+  // initCalendar()
   const userStore = useUserStore()
 
   console.log('userState', userStore.profile.id)

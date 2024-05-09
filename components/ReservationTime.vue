@@ -81,7 +81,16 @@
                 <button
                   v-for="(item, i) in section.times"
                   :key="i"
-                  @click="$emit('selectTime', item)"
+                  @click="
+                    $emit(
+                      'selectTime',
+                      item,
+                      currentYear,
+                      currentMonth,
+                      currentDate
+                    ),
+                      changeColor(item, i)
+                  "
                   class="button_style"
                   :disabled="item.status == 2"
                   :class="
@@ -105,10 +114,11 @@
   </div>
   <div>
     <!-- <button
+      @click="$emit('testEmit', currentMonth)"
       type="button"
       class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
     >
-      預約
+      emittest
     </button> -->
   </div>
 
@@ -125,6 +135,9 @@ import { googleTokenLogin } from 'vue3-google-login'
 const emit = defineEmits<{
   (e: 'selectTime', id: number): void
   (e: 'update', value: string): void
+  (e: 'currentDate', value: string): void
+  (e: 'currentMonth', value: string): void
+  (e: 'currentYear', value: string): void
 }>()
 const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
@@ -336,6 +349,16 @@ function changeTime(item, time) {
   console.log('item', item)
   console.log('time', time.time)
 }
+function changeColor(item) {
+  console.log('timeSections', timeSections.value)
+  timeSections.value.forEach(item => {
+    item.times.forEach(time => {
+      console.log('item.statues', time.status)
+      time.status = 0
+    })
+  })
+  item.status = 1
+}
 
 async function handleGoogleLogin() {
   const accessToken = await googleTokenLogin({
@@ -462,6 +485,11 @@ onMounted(() => {
 @media (min-width: 1280px) {
   .time-container {
     max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .time-container {
+    max-width: 1536px;
   }
 }
 

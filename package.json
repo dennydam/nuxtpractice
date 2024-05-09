@@ -7,13 +7,15 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy": "gh-pages --dotfiles -d .output/public"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/tailwindcss": "^6.10.1",
     "@prisma/client": "^5.10.2",
     "@samk-dev/nuxt-vcalendar": "^1.0.2",
+    "gh-pages": "^6.1.1",
     "google-auth-library": "^9.4.1",
     "nuxt": "^3.10.3",
     "nuxt-headlessui": "^1.1.5",

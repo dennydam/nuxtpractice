@@ -1,4 +1,5 @@
 import { Connection, Request, TYPES } from 'tedious'
+import appointment from '../db/appointment'
 
 // const config = {
 //   server: 'DESKTOP-JSLVL3F',
@@ -133,7 +134,7 @@ export const addAppointment = async (config, item) => {
               })
               // 將用戶 ID 作為參數添加到插入查詢中
               const userId = '2'
-              insertRequest.addParameter('userId', TYPES.NVarChar, userId)
+              insertRequest.addParameter('userId', TYPES.NVarChar, item.userId)
               // 執行插入操作
               connection.execSql(insertRequest)
             }
@@ -146,6 +147,43 @@ export const addAppointment = async (config, item) => {
         // checkConflictRequest.addParameter('userId', TYPES.NVarChar, userId)
         // 執行時間衝突查詢
         connection.execSql(checkConflictRequest)
+      }
+    })
+
+    connection.connect()
+  })
+}
+
+export const deleteAppointment = async (config, appointmentId) => {
+  return new Promise((resolve, reject) => {
+    let connection = new Connection(config)
+    connection.on('connect', (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        // 檢查時間衝突的 SQL 查詢
+        // const appointmentTime = item.
+        const deleteAppointmentId = appointmentId.toString()
+        console.log('deleteAppointmentId', deleteAppointmentId)
+
+        // 如果沒有時間衝突，則執行插入操作
+        const deleteQuery = `DELETE FROM [sideprojectDB].[dbo].[Appointment]
+                 WHERE [id] = @appointmentId;                
+              `
+        const deleteRequest = new Request(deleteQuery, (deleteErr, deleteRowCount) => {
+          if (deleteErr) {
+            reject(deleteErr)
+          } else {
+            console.log(`${deleteRowCount} rows delete`)
+            // reject({ status: 400, message: 'Time conflict' })
+
+            resolve({ staus: 200, message: ' success' })
+          }
+        })
+
+        deleteRequest.addParameter('appointmentId', TYPES.NVarChar, deleteAppointmentId)
+        // 執行插入操作
+        connection.execSql(deleteRequest)
       }
     })
 

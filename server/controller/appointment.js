@@ -1,5 +1,5 @@
 import { H3Event, createError } from 'h3'
-import { addAppointment } from '../model/appointment'
+import { addAppointment, deleteAppointment } from '../model/appointment'
 const config = {
   server: 'DESKTOP-JSLVL3F',
   authentication: {
@@ -49,6 +49,17 @@ export const addAppointmentCtrl = async (item) => {
         statusMessage: 'somehteionroiw',
       })
     }
+  }
+}
+
+export const deleteAppointmentCtrl = async (appointmentId) => {
+  console.log('controlllerDeleteItem', appointmentId)
+  try {
+    const result = await deleteAppointment(config, appointmentId)
+    console.log('result', result)
+    return result
+  } catch (e) {
+    console.log('deletee', e)
   }
 }
 

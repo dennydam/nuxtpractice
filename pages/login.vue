@@ -15,7 +15,7 @@
       </div>
       <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form class="space-y-6" @submit.prevent="handleEmailLogin">
+          <!-- <form class="space-y-6" @submit.prevent="handleEmailLogin">
             <div>
               <label for="email" class="block text-sm font-medium text-gray-700"
                 >電子信箱</label
@@ -59,13 +59,13 @@
                 登入
               </button>
             </div>
-          </form>
+          </form> -->
 
-          <div class="my-4 flex items-center backdrop:relative">
+          <!-- <div class="my-4 flex items-center backdrop:relative">
             <div class="flex-grow border-t border-gray-200"></div>
             <span class="mx-4 flex-shrink text-gray-300">或</span>
             <div class="flex-grow border-t border-gray-200"></div>
-          </div>
+          </div> -->
 
           <div class="flex flex-col space-y-2">
             <button
@@ -105,7 +105,7 @@
                 >使用 Google 繼續</span
               >
             </button>
-            <button
+            <!-- <button
               type="button"
               class="group relative flex w-full justify-center rounded-md border border-gray-100 bg-white py-2 px-4 text-sm font-medium shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               @click="
@@ -118,7 +118,7 @@
               <span class="text-slate-500 group-hover:text-slate-600"
                 >使用電子信箱註冊</span
               >
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -126,7 +126,7 @@
   </div>
 
   <div class="relative inline-block text-left">
-    <div>
+    <!-- <div>
       <button
         type="button"
         class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
@@ -148,7 +148,7 @@
           />
         </svg>
       </button>
-    </div>
+    </div> -->
 
     <!--
     Dropdown menu, show/hide based on menu state.

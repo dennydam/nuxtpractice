@@ -3,14 +3,14 @@
 const path = require('path')
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  nitro: {
-    output: {
-      publicDir: path.join(__dirname, 'docs'),
-    },
-  },
+  // nitro: {
+  //   output: {
+  //     publicDir: path.join(__dirname, 'docs'),
+  //   },
+  // },
   app: {
-    baseURL: '/nuxtpractice/',
-    buildAssetsDir: 'nuxt_assets',
+    // baseURL: '/nuxtpractice/',
+    buildAssetsDir: '/static/',
   },
   runtimeConfig: {
     public: {

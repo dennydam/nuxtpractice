@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="backdrop-blur bg-white/30 shadow-md">
-      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="mx-auto  px-2 sm:px-6 ">
         <div class="relative flex h-20 items-center justify-between">
           <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
             <!-- Mobile menu button-->
@@ -64,17 +64,9 @@
                 src="https://simplebeautydemo.simplybook.it/uploads/simplebeautydemo/image_files/preview/4cb105295be36fed171b08ac985d36c9.png"
                 alt="Your Image"
               />
-
-              <!-- <img
-                class="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                alt="Your Company"
-              /> -->
             </div>
             <div class="hidden sm:ml-6 sm:block">
               <div class="flex space-x-4">
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <!-- <a href="#" class="text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a> -->
                 <a
                   href="#"
                   class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
@@ -192,13 +184,22 @@
         </p>
         <!-- 預約時間 -->
         <p class="text-gray-700">您有 {{ item.appointmentTime }} 筆預約.</p>
-        <button
-          type="button"
-          @click="toggleModal"
-          class="mt-4 bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-        >
-          Close
-        </button>
+        <div class="flex">
+          <button
+            type="button"
+            @click="toggleModal"
+            class="ml-auto mt-4 bg-[#ffadc4] text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            @click="deleteAppointment(item)"
+            class="ml-auto mt-4 bg-[#ffadc4] text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          >
+            刪除
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -218,6 +219,25 @@ function toggleModal() {
 function toggle() {
   console.log('toogle')
   open.value = !open.value
+}
+
+function deleteAppointment(item) {
+  console.log('item.id', item.id)
+  const appointmentId = item.id
+  const { data: response, error } = useAsyncData(async () => {
+    try {
+      const { data } = await useFetch('/api/appointment/', {
+        method: 'DELETE',
+        body: {
+          appointmentId: appointmentId
+        }
+      })
+      console.log('deleteData', data)
+    } catch (error) {
+      console.error('An error occurred:', error)
+      return null
+    }
+  })
 }
 onMounted(() => {
   const userStore = useUserStore()

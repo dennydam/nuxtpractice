@@ -1,20 +1,19 @@
 <template>
-  <div class="flex flex-wrap  justify-around">
+  <div class="flex flex-wrap  justify-bewteen" style="">
     <div
-      v-for="item in productData"
+      v-for="(item, index) in productData"
       :key="item.id"
-      class="my-2 max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      class="my-2 mx-2 max-w-sm p-6 mx-auto bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
     >
       <a href="#">
         <h5
           class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
         >
-          Noteworthy technology acquisitions 2021
+          {{ item.title }}
         </h5>
       </a>
       <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-        Here are the biggest enterprise technology acquisitions of 2021 so far,
-        in reverse chronological order.
+        {{ item.content }}
       </p>
       <button
         @click="$emit('selectItem', item)"
@@ -24,7 +23,7 @@
         Select
       </button>
 
-      <div class="flex" @click="toggleExpand">
+      <div class="flex hover:text-gray-600 " @click="toggleExpand(index)">
         <span>read more....</span>
         <transition name="rotate">
           <svg
@@ -34,7 +33,7 @@
             fill="none"
             viewBox="0 0 14 8"
             :style="{
-              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transform: isExpanded[index] ? 'rotate(180deg)' : 'rotate(0deg)',
               transition: 'transform 0.5s'
             }"
           >
@@ -48,7 +47,11 @@
           </svg>
         </transition>
       </div>
-      <div v-if="isExpanded">領域展開</div>
+      <div v-if="isExpanded[index]">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro
+        cupiditate veritatis nulla, atque explicabo, iste neque nesciunt non qui
+        odit minus dolor quae soluta deleniti architecto alias eaque culpa quas.
+      </div>
     </div>
   </div>
 </template>
@@ -62,7 +65,7 @@ const productData = ref<ProductData[]>([
     id: 1,
     title: 'Noteworthy technology acquisitions 2021',
     price:100,
-    content: 'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
+    content: ' in reverse chronological order.',
     // chooseItem: '',
   },
   {
@@ -75,10 +78,9 @@ const productData = ref<ProductData[]>([
     id: 3,
     title: 'Noteworthy technology acquisitions 2022',
     price:200,
-    content: 'Here are the biggest enterprise technology acquisitions of 2022 so far, in reverse chronological order.',
+    content: ' in reverse chronological order.',
   },
 ])
-// const tableData = ref<TableDataItem[]>([])
 
 const emit = defineEmits<{
   (e: 'selectTime', id: number): void
@@ -89,18 +91,18 @@ const emit = defineEmits<{
 //   update: [value: string]
 // }>()
 
-const isExpanded = ref(false)
+ const isExpanded = ref(Array(productData.length).fill(false));
 const chooseItem = ref()
 
 const selectItem = () => {
   console.log('666')
   chooseItem.value = '333'
 }
-const toggleExpand = () => {
+const toggleExpand = (index) => {
   console.log('777')
-  isExpanded.value = !isExpanded.value
+  isExpanded.value[index] =!isExpanded.value[index]
+    // this.$set(this.isExpanded, index, !this.isExpanded[index]);
 }
-// import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 </script>
 <style>
 .rotate-enter-active,
