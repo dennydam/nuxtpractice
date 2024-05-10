@@ -9,9 +9,15 @@ export default defineNuxtConfig({
   //   },
   // },
   app: {
-    // baseURL: '/nuxtpractice/',
+    baseURL: '/nuxtpractice/',
     buildAssetsDir: '/static/',
   },
+  devServer: {
+    url: 'http://localhost:5000',
+    port: 5000,
+  },
+  // CORS配置
+
   runtimeConfig: {
     public: {
       googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,

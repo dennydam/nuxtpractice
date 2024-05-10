@@ -248,13 +248,6 @@ const handleGoogleLogin = async () => {
     return '登入失敗'
   }
 
-  // const { data, execute, pending } = await useFetch('/api/auth/google-auth-token', {
-  //   method: 'POST',
-  //   body: {
-  //     accessToken,
-  //   },
-  // })
-
   const { data, error } = await userStore.googleLogin({
     accessToken
   })
