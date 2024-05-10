@@ -9,13 +9,23 @@ export default defineNuxtConfig({
   //     publicDir: path.join(__dirname, 'docs'),
   //   },
   // },
+  // server: {
+  //   cors: {
+  //     origin: 'https://dennydam.github.io',
+  //     methods: ['GET', 'POST'],
+  //     preflightContinue: false,
+  //     optionsSuccessStatus: 204,
+  //     maxAge: 86400,
+  //     credentials: true,
+  //   },
+  // },
   app: {
     baseURL: '/nuxtpractice/',
     buildAssetsDir: '/static/',
   },
   devServer: {
-    url: 'http://localhost:5000',
-    port: 5000,
+    // url: 'https://dennydam.github.io/nuxtpractice/',
+    // port: 5000,
   },
   // CORS配置
 

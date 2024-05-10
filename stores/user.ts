@@ -20,6 +20,7 @@ export const useUserStore = defineStore('user', {
       const { data, error } = await useFetch('/api/auth/google-auth-token', {
         method: 'POST',
         body: loginrData,
+        mode: 'cors',
         // initialCache: false,
       })
       const profileData = JSON.parse(JSON.stringify(data.value))

@@ -196,6 +196,7 @@ async function addAppointment() {
   try {
     const { data } = await useFetch('/api/appointment/', {
       method: 'POST',
+      mode: 'cors',
       body: {
         userId: userId,
         treatment: treatment,
