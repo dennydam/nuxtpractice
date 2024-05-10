@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // import { defineNuxtConfig } from 'nuxt'
 const path = require('path')
+console.log('test')
 export default defineNuxtConfig({
   devtools: { enabled: true },
   // nitro: {
