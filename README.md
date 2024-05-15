@@ -1,0 +1,2 @@
+# nuxtpractice
+nuxtpractice
