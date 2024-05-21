@@ -93,6 +93,9 @@ const emit = defineEmits<{
 
  const isExpanded = ref(Array(productData.length).fill(false));
 const chooseItem = ref()
+function showItem(){
+  console.log('showIttem')
+}
 
 const selectItem = () => {
   console.log('666')

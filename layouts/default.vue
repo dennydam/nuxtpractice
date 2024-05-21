@@ -14,11 +14,7 @@
             >
               <span class="absolute -inset-0.5"></span>
               <span class="sr-only">Open main menu</span>
-              <!--
-            Icon when menu is closed.
 
-            Menu open: "hidden", Menu closed: "block"
-          -->
               <svg
                 class="block h-6 w-6"
                 fill="none"
@@ -33,26 +29,6 @@
                   d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                 />
               </svg>
-              <!--
-            Icon when menu is open.
-
-            Menu open: "block", Menu closed: "hidden"
-          -->
-              <!-- <svg
-              class="hidden h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-                transform="rotate(45 12 12)"
-              />
-            </svg> -->
             </button>
           </div>
           <div
@@ -68,9 +44,10 @@
             <div class="hidden sm:ml-6 sm:block">
               <div class="flex space-x-4">
                 <a
+                  @click="goReservationPage"
                   href="#"
                   class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                  >Team</a
+                  >Service</a
                 >
                 <a
                   href="#"
@@ -134,7 +111,7 @@
           <a
             href="#"
             class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-            >Team</a
+            >Service</a
           >
           <a
             href="#"
@@ -162,28 +139,51 @@
     <!-- background-image: url(/uploads/simplebeautydemo/image_files/background/0fbed59ed6ab3bacd565f376b50746f1.jpg); background-size: cover;background-position: center; -->
 
     <slot />
-
-    <!-- 彈出視窗 -->
     <div
       v-if="isModalOpen"
       class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50"
     >
       <!-- 視窗內容 -->
-      <div
-        v-for="item in userAppointmentData"
-        :key="item.id"
-        class="bg-white p-8 rounded-md shadow-lg"
-      >
+      <div class="bg-white p-8 rounded-md shadow-lg">
         <!-- 視窗標題 -->
-        <h2 class="text-lg font-semibold mb-4">
-          您的預約 {{ item.treatment }}
-        </h2>
+        <h2 class="text-lg font-semibold mb-4">您的預約</h2>
         <!-- 視窗內容 -->
         <p class="text-gray-700">
           您有 {{ userAppointmentData.length }} 筆預約.
         </p>
-        <!-- 預約時間 -->
-        <p class="text-gray-700">您有 {{ item.appointmentTime }} 筆預約.</p>
+        <!-- 列出所有預約項 -->
+        <div v-for="item in userAppointmentData" :key="item.id" class="mb-4">
+          <!-- 預約項目 -->
+          <h3 class="text-gray-700">{{ item.treatment }}</h3>
+          <div class="flex  items-center ">
+            <p class="text-gray-700">預約時間: {{ item.appointmentTime }}</p>
+            <button
+              type="button"
+              @click="deleteAppointment(item)"
+              class="ml-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            >
+              <div style="width:15px;height:15px">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  class="humbleicons hi-trash"
+                >
+                  <path
+                    xmlns="http://www.w3.org/2000/svg"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+        </div>
+        <!-- 關閉按鈕 -->
         <div class="flex">
           <button
             type="button"
@@ -192,26 +192,33 @@
           >
             Close
           </button>
-          <button
-            type="button"
-            @click="deleteAppointment(item)"
-            class="ml-auto mt-4 bg-[#ffadc4] text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          >
-            刪除
-          </button>
         </div>
       </div>
     </div>
+
+    <!-- 彈出視窗 -->
+    <ReservationItem v-if="noshow" @showItem="showItem" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const noshow = false
+
+const { $notify }: any = useNuxtApp()
+const userStore = useUserStore()
+let userAppointmentData = computed(() => userStore.userReservation)
+console.log('userStore', userStore.sta)
+
 const open = ref(false)
-const userAppointmentData = ref<Appointment[]>([])
-// const appointmentTime =
 
 const isModalOpen = ref(false)
+
+function goReservationPage() {
+  router.push({ path: '/reservation' })
+}
 function toggleModal() {
   isModalOpen.value = !isModalOpen.value
 }
@@ -222,7 +229,6 @@ function toggle() {
 }
 
 function deleteAppointment(item) {
-  console.log('item.id', item.id)
   const appointmentId = item.id
   const { data: response, error } = useAsyncData(async () => {
     try {
@@ -232,56 +238,35 @@ function deleteAppointment(item) {
           appointmentId: appointmentId
         }
       })
-      console.log('deleteData', data)
+      $notify({
+        type: 'success',
+        title: '刪除成功',
+        text: 'Delete Success'
+      })
+      const userStore = useUserStore()
+      userStore.deleteAppointment(appointmentId)
+
+      // console.log('deleteData', data)
     } catch (error) {
       console.error('An error occurred:', error)
       return null
     }
   })
 }
-onMounted(() => {
+async function getAppointment() {
   const userStore = useUserStore()
 
   console.log('userState', userStore.profile.id)
   const userId = userStore.profile.id
-  const { data: response, error } = useAsyncData(async () => {
-    try {
-      const { data } = await useFetch('/api/userappointment/', {
-        method: 'POST',
-        body: {
-          userId: userId
-        }
-      })
-      userAppointmentData.value = data.value.data
-      userAppointmentData.value.forEach(item => {
-        let dateTimeString = item.appointmentTime
-        const dateTime = new Date(dateTimeString)
+  await userStore.googleLogin()
 
-        item.appointmentTime = dateTime.toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        })
-        console.log(item.appointmentTime)
-      })
-      console.log('會員預約資料data', data.value.data[0])
-    } catch (error) {
-      console.error('An error occurred:', error)
-      return null
-    }
-  })
+  userStore.getAppointment()
+}
+onMounted(async () => {
+  await getAppointment()
 })
 </script>
 <style>
-.img-container img {
-  max-width: 100%; /* 限制圖片的最大寬度為容器的寬度 */
-  height: auto; /* 讓圖片高度自適應寬度，從而保持等比例放大縮小 */
-  max-height: 100%; /* 限制圖片的最大高度為容器的高度 */
-}
-
 .test-bg {
   background: none !important;
   background-color: transparent !important;

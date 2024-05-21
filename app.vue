@@ -23,18 +23,8 @@ import { useLoadingStore } from '@/stores/index'
 
 const open = ref(false)
 const { isLoading } = storeToRefs(useLoadingStore())
-console.log('isLoading', isLoading)
 
 const isLoading2 = computed(() => isLoading.value)
-// loadingState.startLoading()
-console.log('isLoading2', isLoading2)
-// const { pending, data: posts } = useFetch('/api/posts', {
-//   lazy: true,
-// })
-function toggle() {
-  console.log('toogle')
-  open.value = !open.value
-}
 </script>
 <style>
 .test-bg {

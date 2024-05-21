@@ -3,17 +3,6 @@ import { Request } from 'tedious'
 import { defineEventHandler, readBody, createError } from 'h3'
 
 export default defineNitroPlugin((nitro) => {
-  //   options: {
-  //     // If you are on Microsoft Azure, you need encryption:
-  //     // instanceName: 'someinstance',
-  //     // server: 'DESKTOP-AO0HJH8\\denny'
-  //     database: 'sideprojectDB', //update me
-  //     encrypt: false,
-  //     // trustedConnection: true,
-  //     // trustServerCertificate: true, // Add this line
-  //   },
-  // }
-
   const config = {
     server: process.env.NUXT_DB_SERVER,
     authentication: {
@@ -31,9 +20,6 @@ export default defineNitroPlugin((nitro) => {
   }
 
   let connection // 保持連線的全域變數
-
-  // var Request = require('tedious').Request
-  // var TYPES = require('tedious').TYPES
 
   connection = new Connection(config)
   function connectToDatabase() {
@@ -72,10 +58,6 @@ export default defineNitroPlugin((nitro) => {
       console.log('result', result)
       result = ''
     })
-
-    // request.on('done', function (rowCount, more) {
-    //   console.log(rowCount + ' rows returned')
-    // })
 
     // Close the connection after the final event emitted by the request, after the callback passes
     request.on('requestCompleted', function (rowCount, more) {

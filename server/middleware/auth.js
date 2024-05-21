@@ -5,6 +5,7 @@ const runtimeConfig = useRuntimeConfig()
 export default defineEventHandler((event) => {
   const jwtToken = getCookie(event, 'access_token')
 
+  // return navigateTo('/login')
   if (!jwtToken) {
     return
   }

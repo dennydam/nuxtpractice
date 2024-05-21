@@ -5,18 +5,13 @@ export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
 
-    console.log('預約相關', body)
     const appointmentId = body.appointmentId
     const result = await deleteAppointmentCtrl(appointmentId)
-    console.log('appdelete', result)
 
-    // console.log('appointment.post.ts', result)
-
-    // return {
-    //   data: result,
-    // }
+    return {
+      data: result,
+    }
   } catch (error) {
-    // 如果发生错误，进行适当的处理
     console.error('An error occurred:', error)
     if (error.statusCode == 400) {
       throw createError({

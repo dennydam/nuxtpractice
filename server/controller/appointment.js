@@ -19,7 +19,6 @@ const config = {
 export const readAppointment = async () => {
   try {
     const result = await appointmentModel.executeStatement(config, '')
-    console.log('resultcontroller', result)
     return result
   } catch {
     throw createError({
@@ -35,7 +34,6 @@ export const addAppointmentCtrl = async (item) => {
   console.log('controllerItem', body)
   try {
     const result = await addAppointment(config, body)
-    console.log('conttrollerapppResult', result)
     return result
   } catch (error) {
     console.log('addAppointeControllerError', error)
@@ -57,7 +55,6 @@ export const deleteAppointmentCtrl = async (appointmentId) => {
   console.log('controlllerDeleteItem', appointmentId)
   try {
     const result = await deleteAppointment(config, appointmentId)
-    console.log('result', result)
     return result
   } catch (e) {
     console.log('deletee', e)

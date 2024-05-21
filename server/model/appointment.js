@@ -1,29 +1,6 @@
 import { Connection, Request, TYPES } from 'tedious'
 import appointment from '../db/appointment'
 
-// export const readAppointment = async () => {
-//   console.log('readAppointment')
-//   const request = new Request('SELECT * FROM [User] ', function (err) {
-//     if (err) {
-//       console.log(err)
-//     } else {
-//       var result = ''
-//       request.on('row', function (columns) {
-//         columns.forEach(function (column) {
-//           if (column.value === null) {
-//             console.log('NULL')
-//           } else {
-//             result += column.value + ' '
-//           }
-//         })
-//         console.log('result', result)
-//         result = ''
-//       })
-//       return result
-//     }
-//   })
-// }
-
 export const executeStatement = (config, query) => {
   return new Promise((resolve, reject) => {
     const connection = new Connection(config)
@@ -63,11 +40,8 @@ export const executeStatement = (config, query) => {
 }
 
 export const addAppointment = async (config, item) => {
-  console.log('model預約資料', item)
-  console.log('modelConfig', config)
   // interface BodyType {
   //   appointmentTime: string; // 假设 appointmentTime 是一个字符串
-  //   // 其他属性的类型声明...
   // }
   // const body = await readBody(item)
 
@@ -77,28 +51,54 @@ export const addAppointment = async (config, item) => {
       if (err) {
         reject(err)
       } else {
-        const specificDate = new Date('2024-04-29T18:44:19.790Z')
+        const appointmentTime = item.appointmentTime // 輸入的時間字串
 
-        // 檢查時間衝突的 SQL 查詢
-        const appointmentTime = item.appointmentTime
-        // const appointmentTime = '2024-04-29T18:44:19.790Z'
+        // 將輸入的時間字串轉換為 JavaScript 的日期物件
+        const date = new Date(appointmentTime)
+
+        // 取得日期部分
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+
+        // 取得時間部分
+        const hours = String(date.getHours()).padStart(2, '0')
+        const minutes = String(date.getMinutes()).padStart(2, '0')
+        const seconds = '00' // 預設秒數為 00
+        const milliseconds = '000' // 預設毫秒數為 000
+        const timezoneOffset = date.getTimezoneOffset() // 取得時區偏移量（分鐘）
+
+        // 格式化時間
+        const formattedTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}${getTimezoneOffsetString(
+          timezoneOffset
+        )}`
+
+        console.log('formattedTime', formattedTime) // 輸出格式化後的時間
+
+        // 輔助函式：取得時區偏移量的字串表示
+        function getTimezoneOffsetString(offset) {
+          const sign = offset > 0 ? '-' : '+'
+          const absOffset = Math.abs(offset)
+          const hours = String(Math.floor(absOffset / 60)).padStart(2, '0')
+          const minutes = String(absOffset % 60).padStart(2, '0')
+          return `${sign}${hours}:${minutes}`
+        }
 
         const checkConflictQuery = `
           SELECT *
           FROM [Appointment]
-          WHERE [authorId] = '2'
+          WHERE [authorId] = @authorId
           AND [appointmentTime] = @appoint
         `
         // console.log('checkConflictQuey檢查', checkConflictQuery)
 
         // 創建一個新的 Request 對象，並傳遞時間衝突查詢
-        const checkConflictRequest = new Request(checkConflictQuery, (err, rowCount) => {
+        const checkConflictRequest = new Request(checkConflictQuery, (err, rowCount, rows) => {
           if (err) {
             console.log('conflicterror', err)
             reject(err)
           } else {
             const conflictCount = rowCount
-            // const conflictCount = Number(rowCount)
             console.log('conflictCount', conflictCount)
             if (conflictCount > 0) {
               console.log('There is a time conflict.')
@@ -107,26 +107,34 @@ export const addAppointment = async (config, item) => {
               // 如果沒有時間衝突，則執行插入操作
               const insertQuery = `
                 INSERT INTO [Appointment] ([treatment], [appointmentTime], [createdAt], [updatedAt], [authorId])
-                VALUES ('測試療程', GETDATE(), GETDATE(), GETDATE(), @userId);
+                VALUES ('測試療程', @appointmentTime, GETDATE(), GETDATE(), @userId);
               `
               const insertRequest = new Request(insertQuery, (insertErr, insertRowCount) => {
                 if (insertErr) {
                   reject(insertErr)
                 } else {
                   console.log(`${insertRowCount} rows inserted`)
-                  resolve(insertRowCount)
+                  resolve({
+                    status: 200,
+                    message: '預約成功',
+                    insertedRows: insertRowCount,
+                  })
+                  // resolve(insertRowCount)
                 }
               })
               // 將用戶 ID 作為參數添加到插入查詢中
               const userId = '2'
               insertRequest.addParameter('userId', TYPES.NVarChar, item.userId)
+              insertRequest.addParameter('appointmentTime', TYPES.DateTime, formattedTime)
+
               // 執行插入操作
               connection.execSql(insertRequest)
             }
           }
         })
         // 將實際的值傳遞給 SQL 查詢中的參數
-        checkConflictRequest.addParameter('appoint', TYPES.DateTime, appointmentTime)
+        checkConflictRequest.addParameter('appoint', TYPES.DateTime, formattedTime)
+        checkConflictRequest.addParameter('authorId', TYPES.NVarChar, item.userId)
 
         // 將要查詢的用戶 ID 作為參數添加到查詢中
         // checkConflictRequest.addParameter('userId', TYPES.NVarChar, userId)
@@ -149,10 +157,9 @@ export const deleteAppointment = async (config, appointmentId) => {
         // 檢查時間衝突的 SQL 查詢
         // const appointmentTime = item.
         const deleteAppointmentId = appointmentId.toString()
-        console.log('deleteAppointmentId', deleteAppointmentId)
 
         // 如果沒有時間衝突，則執行插入操作
-        const deleteQuery = `DELETE FROM [sideprojectDB].[dbo].[Appointment]
+        const deleteQuery = `DELETE FROM [dennyDB1].[dbo].[Appointment]
                  WHERE [id] = @appointmentId;                
               `
         const deleteRequest = new Request(deleteQuery, (deleteErr, deleteRowCount) => {

@@ -5,40 +5,7 @@ import { defineEventHandler, readBody, createError } from 'h3'
 const prisma = new PrismaClient() // 假設 Prisma 生成的模型名稱是 User
 
 class Appointment {
-  // async createUser(options) {
-  //   const userRecord = await prisma.user
-  //     .create({
-  //       data: {
-  //         providerName: options.providerName,
-  //         providerUserId: options.providerUserId,
-  //         nickname: options.nickname,
-  //         email: options.email,
-  //         password: options.password,
-  //         avatar: options.avatar,
-  //         emailVerified: options.emailVerified,
-  //       },
-  //     })
-  //     .catch((error) => {
-  //       console.error(error)
-  //       throw createError({
-  //         statusCode: 500,
-  //         statusMessage: 'Could not create user. Please try again later.',
-  //       })
-  //     })
-
-  //   return userRecord
-  // }
-
-  //   id Int @id @default(autoincrement())
-  // treatment String
-  // appointmentTime DateTime @default(now())
-  // createdAt DateTime @default(now())
-  // updatedAt DateTime @updatedAt
-  // authorId String?
-  // User     User?    @relation(fields: [authorId], references: [id])
-
   async createAppointment(options) {
-    console.log('預約資料', options)
     const appointmentRecord = await prisma.appointment
       .create({
         data: {

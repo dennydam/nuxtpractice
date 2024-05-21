@@ -212,12 +212,10 @@ const normalMonthDay = reactive<number[]>([
 ])
 function goProductPage() {
   productPage.value = !productPage.value
-  console.log('productPage')
 }
 
 function selectDate(item: any) {
   currentDate.value = item
-  console.log('item', item)
 }
 // 是否为闰年
 function isLeapYear(year: number) {
@@ -345,15 +343,10 @@ timeSections.value = [
   }
 ]
 
-function changeTime(item, time) {
-  console.log('item', item)
-  console.log('time', time.time)
-}
+function changeTime(item, time) {}
 function changeColor(item) {
-  console.log('timeSections', timeSections.value)
   timeSections.value.forEach(item => {
     item.times.forEach(time => {
-      console.log('item.statues', time.status)
       time.status = 0
     })
   })
@@ -364,18 +357,13 @@ async function handleGoogleLogin() {
   const accessToken = await googleTokenLogin({
     clientId: GOOGLE_CLIENT_ID
   }).then(response => response?.access_token)
-  console.log('accessToken', accessToken)
+  // console.log('accessToken', accessToken)
 
   if (!accessToken) {
     // 登入失敗
     return
   }
-  // getGoogleUserInfo()
 
-  // 在這裡使用 getGoogleUserInfo，並將 data 和 accessToken 傳遞給它
-  // await getGoogleUserInfo(data, accessToken as string)
-
-  // userInfo.value = data.value
   const { data, execute, pending } = await useFetch(
     '/api/auth/google-auth-token',
     {
@@ -385,12 +373,9 @@ async function handleGoogleLogin() {
       }
     }
   )
-  console.log('logindata', data.value)
   router.push({ path: '/reservation' })
 }
-// function mounted() {
-//   initCalendar()
-// }
+
 onMounted(() => {
   initCalendar()
 })
@@ -465,12 +450,6 @@ onMounted(() => {
   border-left: 1px solid #eee;
   border-right: 1px solid #eee;
 }
-/* 
-@media (min-width: 640px) {
-  .time-container {
-    max-width: 640px;
-  }
-} */
 
 @media (min-width: 768px) {
   .time-container {

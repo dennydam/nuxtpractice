@@ -1,6 +1,3 @@
-// import { hash } from 'ohash'
-// import { checkStatus } from '@/api/helper/checkStatus'
-// import { getToken } from '@/api/user'
 import type { HttpResponse } from '@/api/interface'
 import { useLoadingStore } from '~/stores/index'
 
@@ -10,7 +7,6 @@ function changeLoading() {
   loadingState.startLoading()
 }
 
-// 请求体拓展
 function configOptions(options: any = {}) {
   // options.headers = { 'access-token': getToken() }
   return options
@@ -26,12 +22,8 @@ const fetch = async (url: string, options?: object): Promise<any> => {
     public: { baseUrl },
   } = useRuntimeConfig()
 
-  // baseUrl 在生产环境中拿不到，暂时不知道什么原因，这里做一下兼容处理
-  // const _baseUrl = baseUrl ?? 'https://mock.mengxuegu.com/mock/63eb40404b99657e29850a49'
   console.log('request url', url)
   const reqUrl = 'http://localhost:3000' + url
-
-  // 不设置key，始终拿到的都是第一个请求的值，参数一样则不会进行第二次请求
 
   // const key = hash(JSON.stringify(options) + url)
 

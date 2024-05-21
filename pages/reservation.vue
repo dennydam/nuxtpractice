@@ -122,11 +122,23 @@ import ReservationTime from '@/components/ReservationTime.vue'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
+
+import { useLoadingStore } from '@/stores/index'
+const loadingState = useLoadingStore()
+
+const { isLoading } = storeToRefs(useLoadingStore())
+
+const isLoading2 = computed(() => isLoading.value)
+const userStore = useUserStore()
+
 // import { Appointment } from '@/utils/types'
 // const userAppointmentData = ref<Appointment[]>([])
 
 // import { getStaffInfoByPage } from '@/api/test'
 import { googleTokenLogin } from 'vue3-google-login'
+const { $notify }: any = useNuxtApp()
+
 const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
 const { googleClientId: GOOGLE_CLIENT_ID }: any = runtimeConfig.public
@@ -142,25 +154,14 @@ const timeArr = ref<any[]>()
 
 //選擇產品
 function selectItem(item) {
-  console.log('item.value', item)
   appointmentItem.value = item
   productPage.value = false
   timePage.value = true
-  console.log('selectItem')
 }
 //選擇時間
 function selectTime(time, currentYear, currentMonth, currentDate) {
-  console.log('選擇時間', time)
-  console.log('YEar', currentYear)
-
-  console.log('YEar', currentYear.toString())
-  console.log('Mohth', currentMonth)
-
   const paddedMonth = currentMonth.toString().padStart(2, '0')
-  console.log('Month:', paddedMonth) // 输出 '04'
   const paddedDate = currentDate.toString().padStart(2, '0')
-
-  console.log('Date', currentDate)
 
   appointmentTime.value =
     currentYear.toString() +
@@ -187,13 +188,12 @@ async function addAppointment() {
   // const reservationTime = dateString + 'T' + appointmentTime.value.time
   const reservationTime = appointmentTime.value
 
-  console.log('今日日期', reservationTime) // 例如：2024-04-30
   const userStore = useUserStore()
 
-  console.log('userState', userStore.profile.id)
   const userId = userStore.profile.id
 
   try {
+    loadingState.startLoading()
     const { data } = await useFetch('/api/appointment/', {
       method: 'POST',
       mode: 'cors',
@@ -203,45 +203,40 @@ async function addAppointment() {
         appointmentTime: reservationTime
       },
       onResponse({ request, response, options }) {
-        console.log('onResponse', response)
         if (response.status == 400) {
-          console.log('抓')
           $notify({
-            type: 'success',
-            title: 'Notification Title',
-            text: 'Notification Text'
+            type: 'error',
+            title: '預約時間衝突',
+            text: '已有人預約'
           })
         } else if (response.status == 200) {
+          const userStore = useUserStore()
+          userStore.getAppointment()
           $notify({
             type: 'success',
             title: '預約成功',
             text: '預約成功'
           })
         }
+        loadingState.stopLoading()
       }
     })
     // console.log('statusCode', pending.value)
   } catch (error) {
+    loadingState.stopLoading()
+
     console.error('An error occurred:', error)
   }
 }
 function goProductPage() {
   timePage.value = false
   productPage.value = true
-  console.log('productPage')
 }
 
 function goTimePage() {
   productPage.value = false
   timePage.value = true
-  console.log('timePage', timePage.value)
 }
-
-// function selectDate(item: any) {
-//   // currentDate.value = item
-//   // console.log('item', item)
-//   console.log('Date', item)
-// }
 
 // 获取当前日期
 function getCurrentDate() {
@@ -260,7 +255,7 @@ async function handleGoogleLogin() {
   const accessToken = await googleTokenLogin({
     clientId: GOOGLE_CLIENT_ID
   }).then(response => response?.access_token)
-  console.log('accessToken', accessToken)
+  // console.log('accessToken', accessToken)
 
   if (!accessToken) {
     // 登入失敗
@@ -281,35 +276,13 @@ async function handleGoogleLogin() {
       }
     }
   )
-  console.log('logindata', data.value)
+  // console.log('logindata', data.value)
   router.push({ path: '/reservation' })
 }
 // function mounted() {
 //   initCalendar()
 // }
-onBeforeMount(async () => {
-  // initCalendar()
-  const userStore = useUserStore()
-
-  console.log('userState', userStore.profile.id)
-  const userId = userStore.profile.id
-
-  // const { data: response, error } = useAsyncData(async () => {
-  //   try {
-  //     const { data } = await useFetch('/api/userappointment/', {
-  //       method: 'POST',
-  //       body: {
-  //         userId: userId
-  //       }
-  //     })
-  //     userAppointmentData.value = data.value.data
-  //     console.log('會員預約資料data', data.value.data[0])
-  //   } catch (error) {
-  //     console.error('An error occurred:', error)
-  //     return null
-  //   }
-  // })
-})
+onBeforeMount(async () => {})
 </script>
 
 <style>
