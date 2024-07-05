@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   //   },
   // },
   app: {
-    baseURL: '/nuxtpractice/',
+    // baseURL: '/nuxtpractice/',
     buildAssetsDir: '/static/',
   },
   devServer: {

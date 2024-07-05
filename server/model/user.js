@@ -37,7 +37,7 @@ export const userLoginModel = async (config, item) => {
             } else {
               // 如果沒有時間衝突，則執行插入操作
               const insertQuery = `
-              INSERT INTO[sideprojectDB].[dbo].[User] ([id], [providerName], 
+              INSERT INTO[dennyDB1].[dbo].[User] ([id], [providerName], 
                 [providerUserId], [nickname], [email], [password], [emailVerified], [createdAt], [updatedAt], [avatar])
 VALUES (@userId, @googleGivenName, 'randomId', '@googleName', 'email_value', 'passwordrandom', 0, GETDATE(), GETDATE(), 'avatar_value');
               `

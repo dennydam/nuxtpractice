@@ -1,22 +1,6 @@
 import { Connection, Request, TYPES } from 'tedious'
 import appointment from '../db/appointment'
 
-// const config = {
-//   server: 'DESKTOP-JSLVL3F',
-//   authentication: {
-//     type: 'default',
-//     options: {
-//       userName: 'sa',
-//       domain: 'DESKTOP-JSLVL3F',
-//       password: '3939889',
-//     },
-//   },
-//   options: {
-//     database: 'sideprojectDB',
-//     encrypt: false,
-//   },
-// }
-
 // export const readAppointment = async () => {
 //   console.log('readAppointment')
 //   const request = new Request('SELECT * FROM [User] ', function (err) {
@@ -80,6 +64,7 @@ export const executeStatement = (config, query) => {
 
 export const addAppointment = async (config, item) => {
   console.log('model預約資料', item)
+  console.log('modelConfig', config)
   // interface BodyType {
   //   appointmentTime: string; // 假设 appointmentTime 是一个字符串
   //   // 其他属性的类型声明...

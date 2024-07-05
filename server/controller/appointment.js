@@ -1,18 +1,19 @@
 import { H3Event, createError } from 'h3'
 import { addAppointment, deleteAppointment } from '../model/appointment'
+
 const config = {
-  server: 'DESKTOP-JSLVL3F',
+  server: process.env.NUXT_DB_SERVER,
   authentication: {
     type: 'default',
     options: {
-      userName: 'sa',
-      domain: 'DESKTOP-JSLVL3F',
-      password: '3939889',
+      userName: process.env.NUXT_DB_USER,
+      // domain: 'DESKTOP-JSLVL3F',
+      password: process.env.NUXT_DB_PASSWORD,
     },
   },
   options: {
-    database: 'sideprojectDB',
-    encrypt: false,
+    database: process.env.NUXT_DB_DATABASE,
+    encrypt: true,
   },
 }
 export const readAppointment = async () => {

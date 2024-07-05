@@ -3,25 +3,19 @@ import { Request } from 'tedious'
 import { defineEventHandler, readBody, createError } from 'h3'
 
 export default defineNitroPlugin((nitro) => {
-  var config = {
-    server: 'DESKTOP-JSLVL3F', //update me
+  const config = {
+    server: process.env.NUXT_DB_SERVER,
     authentication: {
       type: 'default',
       options: {
-        userName: 'sa', //update me
-        domain: 'DESKTOP-JSLVL3F', //update me
-        password: '3939889',
-        // password: 'cindydenny',
+        userName: process.env.NUXT_DB_USER,
+        // domain: 'DESKTOP-JSLVL3F',
+        password: process.env.NUXT_DB_PASSWORD,
       },
     },
     options: {
-      // If you are on Microsoft Azure, you need encryption:
-      // instanceName: 'someinstance',
-      // server: 'DESKTOP-AO0HJH8\\denny'
-      database: 'sideprojectDB', //update me
-      encrypt: false,
-      // trustedConnection: true,
-      // trustServerCertificate: true, // Add this line
+      database: process.env.NUXT_DB_DATABASE,
+      encrypt: true,
     },
   }
 
