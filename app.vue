@@ -31,6 +31,7 @@ console.log('isLoading2', isLoading2)
 // const { pending, data: posts } = useFetch('/api/posts', {
 //   lazy: true,
 // })
+console.log("test")
 function toggle() {
   open.value = !open.value
 }
