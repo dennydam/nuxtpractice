@@ -32,7 +32,6 @@ console.log('isLoading2', isLoading2)
 //   lazy: true,
 // })
 function toggle() {
-  console.log('toogle')
   open.value = !open.value
 }
 </script>
