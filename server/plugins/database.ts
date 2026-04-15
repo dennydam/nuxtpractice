@@ -1,28 +1,16 @@
-import { createRequire } from 'module'
-import type * as sqlite3Types from 'sqlite3'
+import { DatabaseSync } from 'node:sqlite'
 
-function loadSqlite3(): typeof sqlite3Types {
-  return createRequire(import.meta.url)('sqlite3')
-}
-
-const { Database } = loadSqlite3()
+const db = new DatabaseSync('./database.sqlite')
 
 export default defineNitroPlugin((nitro) => {
-  const db = new Database('./database.sqlite', (err) => {
-    if (err) {
-      console.error('Error connecting to database:', err.message)
-      return
-    }
-    console.log('Connected to SQLite database')
-    db.run('PRAGMA foreign_keys = ON')
-    initializeDatabase(db)
-  })
-
+  console.log('Connected to SQLite database')
+  db.exec('PRAGMA foreign_keys = ON')
+  initializeDatabase()
   nitro.db = db
 })
 
-function initializeDatabase(db: sqlite3Types.Database): void {
-  const createUserTable = `
+function initializeDatabase(): void {
+  db.exec(`
     CREATE TABLE IF NOT EXISTS User (
       id TEXT PRIMARY KEY,
       providerName TEXT,
@@ -35,9 +23,10 @@ function initializeDatabase(db: sqlite3Types.Database): void {
       updatedAt TEXT,
       avatar TEXT
     )
-  `
+  `)
+  console.log('User 表建立成功或已存在')
 
-  const createAppointmentTable = `
+  db.exec(`
     CREATE TABLE IF NOT EXISTS Appointment (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       treatment TEXT,
@@ -47,21 +36,6 @@ function initializeDatabase(db: sqlite3Types.Database): void {
       authorId TEXT,
       FOREIGN KEY(authorId) REFERENCES User(id)
     )
-  `
-
-  db.run(createUserTable, (err) => {
-    if (err) {
-      console.error('建立 User 表失敗:', err)
-    } else {
-      console.log('User 表建立成功或已存在')
-    }
-  })
-
-  db.run(createAppointmentTable, (err) => {
-    if (err) {
-      console.error('建立 Appointment 表失敗:', err)
-    } else {
-      console.log('Appointment 表建立成功或已存在')
-    }
-  })
+  `)
+  console.log('Appointment 表建立成功或已存在')
 }

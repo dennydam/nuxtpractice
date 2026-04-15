@@ -1,24 +1,10 @@
-import type { Database } from 'sqlite3'
-import { AppointmentItem } from '../../types/appointment'
+import type { DatabaseSync } from 'node:sqlite'
+import type { AppointmentItem } from '../../types/appointment'
 
-export const userReservation = (db: Database, userId: string): Promise<AppointmentItem[]> => {
-  return new Promise((resolve, reject) => {
-    console.log('查詢預約，User ID:', userId)
-
-    const reservationQuery = `
-      SELECT *
-      FROM Appointment
-      WHERE authorId = ?
-    `
-
-    db.all(reservationQuery, [userId], (err, rows: AppointmentItem[]) => {
-      if (err) {
-        console.error('查詢失敗:', err)
-        reject(err)
-      } else {
-        console.log('查詢結果:', rows)
-        resolve(rows)
-      }
-    })
-  })
+export const userReservation = (db: DatabaseSync, userId: string): AppointmentItem[] => {
+  console.log('查詢預約，User ID:', userId)
+  const stmt = db.prepare('SELECT * FROM Appointment WHERE authorId = ?')
+  const rows = stmt.all(userId) as AppointmentItem[]
+  console.log('查詢結果:', rows)
+  return rows
 }

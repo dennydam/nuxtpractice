@@ -48,37 +48,17 @@ export default defineEventHandler(async (event): Promise<GoogleAuthResponse> => 
   const db = nitroApp.db
 
   // Step 1: 先嘗試插入（若已存在則忽略）
-  await new Promise<void>((resolve, reject) => {
-    db.run(
-      `INSERT OR IGNORE INTO User (id, providerName, providerUserId, nickname, email, createdAt, updatedAt)
-       VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-      [userInfo.sub, 'google', userInfo.sub, userInfo.given_name, userInfo.email],
-      (err) => {
-        if (err) {
-          console.error('User INSERT OR IGNORE 失敗:', err)
-          return reject(err)
-        }
-        console.log('User INSERT OR IGNORE 成功, id:', userInfo.sub)
-        resolve()
-      },
-    )
-  })
+  db.prepare(
+    `INSERT OR IGNORE INTO User (id, providerName, providerUserId, nickname, email, createdAt, updatedAt)
+     VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+  ).run(userInfo.sub, 'google', userInfo.sub, userInfo.given_name, userInfo.email)
+  console.log('User INSERT OR IGNORE 成功, id:', userInfo.sub)
 
   // Step 2: 更新既有資料
-  await new Promise<void>((resolve, reject) => {
-    db.run(
-      `UPDATE User SET nickname = ?, email = ?, updatedAt = datetime('now') WHERE id = ?`,
-      [userInfo.given_name, userInfo.email, userInfo.sub],
-      (err) => {
-        if (err) {
-          console.error('User UPDATE 失敗:', err)
-          return reject(err)
-        }
-        console.log('User UPDATE 成功, id:', userInfo.sub)
-        resolve()
-      },
-    )
-  })
+  db.prepare(
+    `UPDATE User SET nickname = ?, email = ?, updatedAt = datetime('now') WHERE id = ?`,
+  ).run(userInfo.given_name, userInfo.email, userInfo.sub)
+  console.log('User UPDATE 成功, id:', userInfo.sub)
 
   return {
     id: userInfo.sub,

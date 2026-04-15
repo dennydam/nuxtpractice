@@ -1,4 +1,4 @@
-import type { Database } from 'sqlite3'
+import type { DatabaseSync } from 'node:sqlite'
 
 interface AddAppointmentBody {
   userId: string
@@ -14,80 +14,49 @@ interface AppointmentResult {
   deletedRows?: number
 }
 
-export const addAppointment = (db: Database, item: AddAppointmentBody): Promise<AppointmentResult> => {
-  return new Promise((resolve, reject) => {
-    const dateObj = new Date(item.appointmentTime)
-    const formattedTime = dateObj.toISOString()
+export const addAppointment = (db: DatabaseSync, item: AddAppointmentBody): AppointmentResult => {
+  const dateObj = new Date(item.appointmentTime)
+  const formattedTime = dateObj.toISOString()
 
-    const checkConflictQuery = `
-      SELECT count(*) as count
-      FROM Appointment
-      WHERE authorId = ?
-      AND appointmentTime = ?
-    `
+  const checkStmt = db.prepare('SELECT count(*) as count FROM Appointment WHERE authorId = ? AND appointmentTime = ?')
+  const row = checkStmt.get(item.userId, formattedTime) as { count: number }
 
-    db.get(checkConflictQuery, [item.userId, formattedTime], (err, row: { count: number }) => {
-      if (err) {
-        console.error('檢查衝突失敗:', err)
-        return reject(err)
-      }
+  if (row.count > 0) {
+    console.log('There is a time conflict.')
+    throw { status: 400, message: 'Time conflict' }
+  }
 
-      if (row.count > 0) {
-        console.log('There is a time conflict.')
-        return reject({ status: 400, message: 'Time conflict' })
-      }
+  const insertStmt = db.prepare(`
+    INSERT INTO Appointment (treatment, appointmentTime, createdAt, updatedAt, authorId)
+    VALUES (?, ?, datetime('now'), datetime('now'), ?)
+  `)
+  const result = insertStmt.run(item.treatment, formattedTime, item.userId)
+  console.log(`${result.changes} rows inserted, ID: ${result.lastInsertRowid}`)
 
-      const insertQuery = `
-        INSERT INTO Appointment (treatment, appointmentTime, createdAt, updatedAt, authorId)
-        VALUES (?, ?, datetime('now'), datetime('now'), ?)
-      `
-
-      const params = [item.treatment, formattedTime, item.userId]
-
-      db.run(insertQuery, params, function (insertErr) {
-        if (insertErr) {
-          console.error('插入失敗:', insertErr)
-          return reject(insertErr)
-        }
-
-        console.log(`${this.changes} rows inserted, ID: ${this.lastID}`)
-
-        resolve({
-          status: 200,
-          message: '預約成功',
-          insertedRows: this.changes,
-          id: this.lastID,
-        })
-      })
-    })
-  })
+  return {
+    status: 200,
+    message: '預約成功',
+    insertedRows: result.changes,
+    id: Number(result.lastInsertRowid),
+  }
 }
 
-export const deleteAppointment = (db: Database, appointmentId: string | number): Promise<AppointmentResult> => {
-  return new Promise((resolve, reject) => {
-    const deleteQuery = `DELETE FROM Appointment WHERE id = ?`
+export const deleteAppointment = (db: DatabaseSync, appointmentId: string | number): AppointmentResult => {
+  const deleteStmt = db.prepare('DELETE FROM Appointment WHERE id = ?')
+  const result = deleteStmt.run(appointmentId)
+  console.log(`${result.changes} rows deleted`)
 
-    db.run(deleteQuery, [appointmentId], function (err) {
-      if (err) {
-        console.error('刪除失敗:', err)
-        return reject(err)
-      }
+  if (result.changes === 0) {
+    return {
+      status: 404,
+      message: '找不到該筆預約，刪除失敗',
+      deletedRows: 0,
+    }
+  }
 
-      console.log(`${this.changes} rows deleted`)
-
-      if (this.changes === 0) {
-        resolve({
-          status: 404,
-          message: '找不到該筆預約，刪除失敗',
-          deletedRows: 0,
-        })
-      } else {
-        resolve({
-          status: 200,
-          message: '刪除成功',
-          deletedRows: this.changes,
-        })
-      }
-    })
-  })
+  return {
+    status: 200,
+    message: '刪除成功',
+    deletedRows: result.changes,
+  }
 }

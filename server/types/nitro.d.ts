@@ -1,7 +1,7 @@
-import type { Database } from 'sqlite3'
+import type { DatabaseSync } from 'node:sqlite'
 
 declare module 'nitropack' {
   interface NitroApp {
-    db: Database
+    db: DatabaseSync
   }
 }

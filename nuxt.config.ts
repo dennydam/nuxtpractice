@@ -20,13 +20,6 @@ export default defineNuxtConfig({
   //     credentials: true,
   //   },
   // },
-  nitro: {
-    preset: 'node-server',
-    externals: {
-      external: ['sqlite3'],
-    },
-  },
-
   app: {
     // baseURL: '/nuxtpractice/',
     buildAssetsDir: '/static/',
