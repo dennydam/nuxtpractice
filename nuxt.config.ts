@@ -30,10 +30,10 @@ export default defineNuxtConfig({
   // CORS配置
 
   runtimeConfig: {
+    googleClientSecret: process.env.NUXT_GOOGLE_CLIENT_SECRET,
     public: {
       googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
     },
-    googleClientSecret: process.env.NUXT_GOOGLE_CLIENT_SECRET,
   },
   router: {},
   // css: ['~/assets/main'],
@@ -45,5 +45,6 @@ export default defineNuxtConfig({
     'nuxt-headlessui',
     // '@kyvg/vue3-notification',
     // '~/plugins/database.js',
+    '@nuxt/test-utils/module',
   ],
 })

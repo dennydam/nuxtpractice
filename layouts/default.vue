@@ -157,41 +157,39 @@
           <h3 class="text-gray-700">{{ item.treatment }}</h3>
           <div class="flex  items-center ">
             <p class="text-gray-700">預約時間: {{ item.appointmentTime }}</p>
-            <button
-              type="button"
+            <UiButton
+              variant="danger"
+              size="sm"
+              class="ml-2"
               @click="deleteAppointment(item)"
-              class="ml-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
             >
-              <div style="width:15px;height:15px">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path
                   stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  class="humbleicons hi-trash"
-                >
-                  <path
-                    xmlns="http://www.w3.org/2000/svg"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"
-                  />
-                </svg>
-              </div>
-            </button>
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"
+                />
+              </svg>
+            </UiButton>
           </div>
         </div>
         <!-- 關閉按鈕 -->
         <div class="flex">
-          <button
-            type="button"
+          <UiButton
+            variant="outline"
+            class="ml-auto mt-4"
             @click="toggleModal"
-            class="ml-auto mt-4 bg-[#ffadc4] text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
             Close
-          </button>
+          </UiButton>
         </div>
       </div>
     </div>
@@ -204,13 +202,14 @@
 import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import type { ReservationApiResponse, AppointmentItem } from '@/types/appointment'
+
 const router = useRouter()
 const noshow = false
 
-const { $notify }: any = useNuxtApp()
+const { $notify } = useNuxtApp()
 const userStore = useUserStore()
 let userAppointmentData = computed(() => userStore.userReservation)
-console.log('userStore', userStore.sta)
 
 const open = ref(false)
 
@@ -228,9 +227,9 @@ function toggle() {
   open.value = !open.value
 }
 
-function deleteAppointment(item) {
+function deleteAppointment(item: AppointmentItem) {
   const appointmentId = item.id
-  const { data: response, error } = useAsyncData(async () => {
+  useAsyncData(async () => {
     try {
       const { data } = await useFetch('/api/appointment/', {
         method: 'DELETE',
@@ -256,15 +255,13 @@ function deleteAppointment(item) {
 async function getAppointment() {
   const userStore = useUserStore()
 
-  console.log('userState', userStore.profile.id)
-  const userId = userStore.profile.id
-  await userStore.googleLogin()
+  // const userId = userStore.profile.id
+  // await userStore.googleLogin()
 
   userStore.getAppointment()
 }
-onMounted(async () => {
-  await getAppointment()
-})
+await getAppointment()
+
 </script>
 <style>
 .test-bg {

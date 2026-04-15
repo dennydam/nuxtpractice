@@ -105,13 +105,13 @@
     v-if="timePage"
     class="time-container mx-auto  flex justify-between my-2"
   >
-    <button
-      type="button"
-      class="bg-[#ffadc4] text-white  hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ml-auto"
+    <UiButton
+      variant="brand"
+      class="ml-auto mb-2"
       @click="addAppointment"
     >
       Book Now
-    </button>
+    </UiButton>
   </div>
   <!-- <div v-if="pending">Loading ...</div> -->
 </template>
@@ -137,29 +137,30 @@ const userStore = useUserStore()
 
 // import { getStaffInfoByPage } from '@/api/test'
 import { googleTokenLogin } from 'vue3-google-login'
-const { $notify }: any = useNuxtApp()
+import type { ProductData, TimeSlot, TimeSection } from '@/utils/types'
+const { $notify } = useNuxtApp()
 
 const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
-const { googleClientId: GOOGLE_CLIENT_ID }: any = runtimeConfig.public
+const { googleClientId: GOOGLE_CLIENT_ID } = runtimeConfig.public
 //頁面
 const productPage = ref<boolean>(false)
 const timePage = ref<boolean>(false)
 
 //預約相關
-const appointmentItem = ref<any>()
-const appointmentTime = ref<any>()
-const timeSections = ref<any[]>([])
-const timeArr = ref<any[]>()
+const appointmentItem = ref<ProductData | null>(null)
+const appointmentTime = ref<string>('')
+const timeSections = ref<TimeSection[]>([])
+const timeArr = ref<TimeSlot[]>([])
 
 //選擇產品
-function selectItem(item) {
+function selectItem(item: ProductData): void {
   appointmentItem.value = item
   productPage.value = false
   timePage.value = true
 }
 //選擇時間
-function selectTime(time, currentYear, currentMonth, currentDate) {
+function selectTime(time: TimeSlot, currentYear: number, currentMonth: number, currentDate: number): void {
   const paddedMonth = currentMonth.toString().padStart(2, '0')
   const paddedDate = currentDate.toString().padStart(2, '0')
 
@@ -184,13 +185,15 @@ async function addAppointment() {
   const day = String(currentDate.getDate()).padStart(2, '0')
   const dateString = `${year}-${month}-${day}`
 
+  if (!appointmentItem.value) return
   const treatment = appointmentItem.value.title
-  // const reservationTime = dateString + 'T' + appointmentTime.value.time
   const reservationTime = appointmentTime.value
 
-  const userStore = useUserStore()
-
-  const userId = userStore.profile.id
+  const profileCookie = useCookie('profile')
+  const profileData = typeof profileCookie.value === 'string'
+    ? JSON.parse(profileCookie.value)
+    : profileCookie.value
+  const userId: string | null = profileData?.id ?? null
 
   try {
     loadingState.startLoading()

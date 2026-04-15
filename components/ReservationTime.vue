@@ -1,129 +1,237 @@
 <template>
-  <!-- <span>{{ testString }}</span> -->
+  <section
+    class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 py-12 px-4 sm:px-6 lg:px-8"
+  >
+    <div class="max-w-5xl mx-auto">
+      <!-- Title Area -->
+      <div class="text-center mb-10">
+        <p class="text-xs uppercase tracking-[0.2em] text-pink-500 mb-3">
+          Step 2
+        </p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">
+          Select a date & time
+        </h2>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-500">
+          Pick a date from the calendar, then choose an available time slot to
+          complete your reservation.
+        </p>
+      </div>
 
-  <!-- <VDatePicker v-model="dateChose" /> -->
-  <div class="" style="font-weight: 900; font-family: Avenir, sans-serif">
-    <div class="toolbar">
-      <button class="btn" @click="preMonth">上一月</button>
-      <div class="date">{{ currentYear }}年{{ currentMonth }}月</div>
-      <button class="btn hover" @click="nextMonth">下一月</button>
-    </div>
-    <div class="container mx-auto calendar">
-      <div v-for="(item, index) in header" :key="index" class="grid-item">
-        {{ item }}
-      </div>
-      <div
-        v-for="(item, index) in lastMonthSurplusDayArray"
-        :key="index"
-        class="grid-item"
-      >
-        {{ item }}
-      </div>
-      <div
-        v-for="(item, index) in currentMonthDayCount"
-        @click="selectDate(item)"
-        :key="index"
-        :class="['grid-item', currentDate === item ? 'very-hot' : 'normal-hot']"
-      >
-        {{ item }}
-      </div>
-      <div
-        v-for="(item, index) in nextMonthSurplusDayArray"
-        :key="index"
-        class="grid-item"
-      >
-        {{ item }}
-      </div>
-    </div>
-    <div class="mt-5 flex mx-auto time-container  " style="">
-      <div class="mx-auto calendar mr-5" style="height:150px;width:250px">
-        <div class="p-3">
-          <span>Body Massage</span>
-          <div class="my-3 flex justify-items-center items-center">
-            <img
-              class="round-image"
-              style="width:50px;height:50px"
-              src="https://png.pngtree.com/thumb_back/fh260/background/20210907/pngtree-massage-and-health-care-during-the-day-image_811638.jpg"
-            />
-            <div class="flex">
+      <div class="grid gap-8 lg:grid-cols-[1.1fr_1fr] items-start">
+        <!-- 左側：日期 + 時間卡片 -->
+        <UiCard shadow="sm" padding="md" class="space-y-6">
+          <!-- 月份切換 -->
+          <div class="flex items-center justify-between mb-2">
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-pink-200 hover:text-pink-600 hover:bg-pink-50 transition"
+              @click="preMonth"
+            >
               <svg
+                class="h-3.5 w-3.5"
                 xmlns="http://www.w3.org/2000/svg"
+                fill="none"
                 viewBox="0 0 24 24"
-                fill="currentColor"
-                class="ml-2 h-8 w-10 "
+                stroke="currentColor"
               >
                 <path
-                  d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"
-                />
-                <path
-                  fill-rule="evenodd"
-                  d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z"
-                  clip-rule="evenodd"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M15 19l-7-7 7-7"
                 />
               </svg>
-              <span>$100</span>
+              <span>Previous</span>
+            </button>
+
+            <div class="text-sm font-semibold text-slate-900">
+              {{ currentYear }}年 {{ currentMonth }}月
+            </div>
+
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-pink-200 hover:text-pink-600 hover:bg-pink-50 transition"
+              @click="nextMonth"
+            >
+              <span>Next</span>
+              <svg
+                class="h-3.5 w-3.5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- 星期標題 -->
+          <div
+            class="grid grid-cols-7 gap-2 text-[11px] font-semibold tracking-wide text-slate-400 uppercase"
+          >
+            <div v-for="(item, index) in header" :key="index" class="text-center">
+              {{ item }}
             </div>
           </div>
-        </div>
-      </div>
-      <div class="container mx-auto calendar  flex">
-        <div class="flex flex-wrap">
-          <span class="mt-3"> Available start times</span>
-          <div class="flex text-center">
+
+          <!-- 日期格子 -->
+          <div class="grid grid-cols-7 gap-2 text-sm">
+            <!-- 上一個月補位 -->
             <div
-              style="margin: 40px 20px"
-              class=""
-              v-for="(section, index) in timeSections"
-              :key="index"
+              v-for="(item, index) in lastMonthSurplusDayArray"
+              :key="'prev-' + index"
+              class="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center mx-auto rounded-full text-xs md:text-sm text-slate-300"
             >
-              <div class="">
-                <h4>{{ section.label }}</h4>
-                <button
-                  v-for="(item, i) in section.times"
-                  :key="i"
-                  @click="
-                    $emit(
-                      'selectTime',
-                      item,
-                      currentYear,
-                      currentMonth,
-                      currentDate
-                    ),
-                      changeColor(item, i)
-                  "
-                  class="button_style"
-                  :disabled="item.status == 2"
-                  :class="
-                    item.status == 0
-                      ? 'background-color-status'
-                      : item.status == 1
-                      ? 'background-color-status1'
-                      : item.status == 2
-                      ? 'background-color-status2'
-                      : ' '
-                  "
+              {{ item }}
+            </div>
+
+            <!-- 當月日期 -->
+            <button
+              v-for="day in currentMonthDayCount"
+              :key="'curr-' + day"
+              type="button"
+              @click="selectDate(day)"
+              :class="[
+                'flex h-9 w-9 md:h-10 md:w-10 items-center justify-center mx-auto rounded-full text-xs md:text-sm transition',
+                currentDate === day
+                  ? 'bg-pink-500 text-white font-semibold shadow-sm'
+                  : 'text-slate-700 hover:bg-pink-50 hover:text-pink-600'
+              ]"
+            >
+              {{ day }}
+            </button>
+
+            <!-- 下一個月補位 -->
+            <div
+              v-for="(item, index) in nextMonthSurplusDayArray"
+              :key="'next-' + index"
+              class="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center mx-auto rounded-full text-xs md:text-sm text-slate-300"
+            >
+              {{ item }}
+            </div>
+          </div>
+
+          <!-- 時間區塊 -->
+          <div class="border-t border-slate-100 pt-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-slate-900">
+                Available start times
+              </h3>
+            </div>
+
+            <div class="space-y-4">
+              <div
+                v-for="(section, index) in timeSections"
+                :key="index"
+                class="space-y-2"
+              >
+                <h4
+                  class="text-[11px] font-semibold uppercase tracking-wide text-slate-400"
                 >
-                  {{ item.time }}
-                </button>
+                  {{ section.label }}
+                </h4>
+
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    v-for="(item, i) in section.times"
+                    :key="i"
+                    type="button"
+                    @click="
+                      $emit(
+                        'selectTime',
+                        item,
+                        currentYear,
+                        currentMonth,
+                        currentDate
+                      );
+                      changeColor(item);
+                    "
+                    :disabled="item.status === 2"
+                    :class="[
+                      'inline-flex items-center justify-center rounded-full px-3 py-1.5 text-xs sm:text-sm font-medium border transition',
+                      item.status === 0
+                        ? 'border-slate-200 text-slate-600 bg-white hover:bg-pink-50 hover:border-pink-200 hover:text-pink-600'
+                        : item.status === 1
+                        ? 'border-transparent bg-pink-500 text-white shadow-sm'
+                        : 'border-slate-100 bg-slate-100 text-slate-400 cursor-not-allowed line-through'
+                    ]"
+                  >
+                    {{ item.time }}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </UiCard>
+
+        <!-- 右側：已選服務資訊卡片 -->
+        <UiCard shadow="sm" padding="md" class="space-y-5">
+          <h3 class="text-sm font-semibold text-slate-900">
+            Selected service
+          </h3>
+
+          <div class="flex items-center gap-4">
+            <img
+              class="h-16 w-16 rounded-2xl object-cover"
+              src="https://png.pngtree.com/thumb_back/fh260/background/20210907/pngtree-massage-and-health-care-during-the-day-image_811638.jpg"
+              alt="Body massage"
+            />
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-slate-900">Body Massage</p>
+              <p class="mt-1 text-xs text-slate-500">
+                60 mins full body massage for deep relaxation.
+              </p>
+
+              <div class="mt-2 flex items-center text-sm font-semibold text-pink-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="mr-1.5 h-4 w-4"
+                >
+                  <path
+                    d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <span>$100</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-100 pt-4 space-y-2 text-xs text-slate-500">
+            <div class="flex items-center justify-between">
+              <span>Date</span>
+              <span v-if="currentDate" class="font-medium text-slate-900">
+                {{ currentYear }}-{{ String(currentMonth).padStart(2, '0') }}-{{
+                  String(currentDate).padStart(2, '0')
+                }}
+              </span>
+              <span v-else class="text-slate-400">Not selected</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Time</span>
+              <span class="text-slate-400">
+                Select a time slot
+              </span>
+            </div>
+          </div>
+        </UiCard>
       </div>
     </div>
-  </div>
-  <div>
-    <!-- <button
-      @click="$emit('testEmit', currentMonth)"
-      type="button"
-      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-    >
-      emittest
-    </button> -->
-  </div>
-
-  <!-- <div v-if="pending">Loading ...</div> -->
+  </section>
 </template>
+
 <script setup lang="ts">
 // import type { analyticsreporting_v4 } from 'googleapis'
 import RerservationItem from '@/components/ReservationItem.vue'
@@ -132,41 +240,28 @@ import { useRouter } from 'vue-router'
 
 // import { getStaffInfoByPage } from '@/api/test'
 import { googleTokenLogin } from 'vue3-google-login'
+import type { TimeSlot, TimeSection } from '@/utils/types'
+
 const emit = defineEmits<{
-  (e: 'selectTime', id: number): void
-  (e: 'update', value: string): void
-  (e: 'currentDate', value: string): void
-  (e: 'currentMonth', value: string): void
-  (e: 'currentYear', value: string): void
+  selectTime: [item: TimeSlot, year: number, month: number, date: number]
+  update: [value: string]
+  currentDate: [value: string]
+  currentMonth: [value: string]
+  currentYear: [value: string]
 }>()
 const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
-const { googleClientId: GOOGLE_CLIENT_ID }: any = runtimeConfig.public
+const { googleClientId: GOOGLE_CLIENT_ID } = runtimeConfig.public
 //頁面
 const productPage = ref<boolean>(false)
 //預約相關
-const timeSections = ref<any[]>([])
-const timeArr = ref<any[]>()
+const timeSections = ref<TimeSection[]>([])
+const timeArr = ref<TimeSlot[]>([])
 
 const dateChose = ref()
 
 //calendar
-const header = reactive<string[]>([
-  'Sun',
-  'Mon',
-  'Tue',
-  'Wen',
-  'Thu',
-  'Fri',
-  'Sat',
-  'Sun',
-  'Mon',
-  'Tue',
-  'Wen',
-  'Thu',
-  'Fri',
-  'Sat'
-])
+const header = reactive<string[]>(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
 // const header = reactive<string[]>(['一', '二', '三', '四', '五', '六', '日'])
 // 上个月剩余天数
 const lastMonthSurplusDay = ref<number>(0)
@@ -210,11 +305,9 @@ const normalMonthDay = reactive<number[]>([
   30,
   31
 ])
-function goProductPage() {
-  productPage.value = !productPage.value
-}
 
-function selectDate(item: any) {
+
+function selectDate(item: number): void {
   currentDate.value = item
 }
 // 是否为闰年
@@ -343,10 +436,10 @@ timeSections.value = [
   }
 ]
 
-function changeTime(item, time) {}
-function changeColor(item) {
-  timeSections.value.forEach(item => {
-    item.times.forEach(time => {
+// function changeTime(item, time) {}
+function changeColor(item: TimeSlot): void {
+  timeSections.value.forEach(section => {
+    section.times.forEach(time => {
       time.status = 0
     })
   })

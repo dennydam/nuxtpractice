@@ -1,11 +1,11 @@
 import type { HttpResponse } from '@/api/interface'
 import { useLoadingStore } from '~/stores/index'
 
-function changeLoading() {
-  const loadingState = useLoadingStore()
-  console.log('changeLoading', loadingState)
-  loadingState.startLoading()
-}
+// function changeLoading() {
+//   const loadingState = useLoadingStore()
+//   console.log('changeLoading', loadingState)
+//   loadingState.startLoading()
+// }
 
 function configOptions(options: any = {}) {
   // options.headers = { 'access-token': getToken() }
@@ -44,7 +44,7 @@ const fetch = async (url: string, options?: object): Promise<any> => {
         const loadingState = useLoadingStore()
         console.log('onResponseError')
         loadingState.stopLoading()
-        console.log('请求失败', response.status, options)
+        console.log('請求失敗', response.status, options)
         reject(response)
       },
     })
@@ -53,10 +53,9 @@ const fetch = async (url: string, options?: object): Promise<any> => {
         const loadingState = useLoadingStore()
         console.log('onResponseError')
         loadingState.stopLoading()
-        console.log('userFetch計算次數')
         // refresh()
         if (error.value) {
-          console.log('请求失败', status)
+          console.log('請求失敗', status)
           reject(error.value)
           return
         }
@@ -69,7 +68,7 @@ const fetch = async (url: string, options?: object): Promise<any> => {
           resolve(dataValue)
         } else {
           // 请求失败
-          console.log('请求失败', dataValue)
+          console.log('請求失敗', dataValue)
           const e = {
             code: dataValue?.code,
           }
@@ -77,7 +76,7 @@ const fetch = async (url: string, options?: object): Promise<any> => {
         }
       })
       .catch((err: any) => {
-        console.log('请求失败', err)
+        console.log('請求失敗', err)
         reject(err)
       })
   })

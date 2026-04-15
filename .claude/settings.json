@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sqlite3 database.sqlite \"SELECT id, nickname, email FROM User LIMIT 10;\")",
+      "Bash(node -e \":*)",
+      "Bash(node_modules/nuxt/bin/nuxt.mjs typecheck:*)",
+      "Bash(npm run:*)",
+      "Bash(node -e \"const p=require\\(''./node_modules/nuxt/package.json''\\); console.log\\(p.version\\)\")",
+      "Bash(node -e \"const p=require\\(''./node_modules/@nuxt/test-utils/package.json''\\); console.log\\(JSON.stringify\\(p.peerDependencies, null, 2\\)\\)\")",
+      "Bash(node -e \"const p=require\\(''./node_modules/@nuxt/kit/package.json''\\); console.log\\(''kit version:'', p.version\\); console.log\\(''peer:'', JSON.stringify\\(p.peerDependencies\\)\\)\")",
+      "Bash(npx playwright:*)"
+    ]
+  }
+}

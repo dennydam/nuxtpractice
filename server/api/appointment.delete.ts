@@ -1,5 +1,5 @@
 import { defineEventHandler, readBody, createError } from 'h3'
-import { deleteAppointmentCtrl } from '../controller/appointment.js'
+import { deleteAppointmentCtrl } from '../controller/appointment'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -11,9 +11,9 @@ export default defineEventHandler(async (event) => {
     return {
       data: result,
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('An error occurred:', error)
-    if (error.statusCode == 400) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw createError({
         statusCode: 400,
         statusMessage: '預約時間衝突',

@@ -4,7 +4,7 @@
 // import { httpRequest } from '@/composables/useHttps'
 import { useUserStore } from '@/stores/user'
 import { appointmentPost } from '@/api/appointment'
-const { $notify }: any = useNuxtApp()
+const { $notify } = useNuxtApp()
 const user = useUserStore()
 // console.log('composablesHttp', httpRequest)
 

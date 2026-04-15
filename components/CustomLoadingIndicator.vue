@@ -2,7 +2,7 @@
   <div class="loading-indicator" :class="{ show: isLoading }">Loading...</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const nuxtApp = useNuxtApp()
 const isLoading = ref(false)
 

@@ -1,59 +1,69 @@
 <template>
-  <div class="flex flex-wrap  justify-bewteen" style="">
-    <div
-      v-for="(item, index) in productData"
-      :key="item.id"
-      class="my-2 mx-2 max-w-sm p-6 mx-auto bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-    >
-      <a href="#">
-        <h5
-          class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-        >
-          {{ item.title }}
-        </h5>
-      </a>
-      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-        {{ item.content }}
-      </p>
-      <button
-        @click="$emit('selectItem', item)"
-        type="button"
-        class="text-gray-900 bg-[#ffadc4] border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-      >
-        Select
-      </button>
-
-      <div class="flex hover:text-gray-600 " @click="toggleExpand(index)">
-        <span>read more....</span>
-        <transition name="rotate">
-          <svg
-            class="w-6 h-6 text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 8"
-            :style="{
-              transform: isExpanded[index] ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.5s'
-            }"
+     <div class="min-h-screen py-16 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-12">
+          Featured Collection
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <UiCard
+            v-for="(item, index) in productData"
+            :key="item.id"
+            padding="none"
+            shadow="sm"
+            class="group flex flex-col overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
-            />
-          </svg>
-        </transition>
-      </div>
-      <div v-if="isExpanded[index]">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro
-        cupiditate veritatis nulla, atque explicabo, iste neque nesciunt non qui
-        odit minus dolor quae soluta deleniti architecto alias eaque culpa quas.
+            <!-- Card Content -->
+            <div class="p-8 flex-1">
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-3 py-1 text-xs font-semibold text-pink-600 bg-pink-50 rounded-full">New</span>
+              </div>
+              
+              <a href="#" class="block group-hover:text-pink-600 transition-colors duration-200">
+                <h5 class="text-xl font-bold tracking-tight text-gray-900 mb-3">
+                  {{ item.title }}
+                </h5>
+              </a>
+              
+              <p class="font-normal text-gray-500 leading-relaxed mb-4">
+                {{ item.content }}
+              </p>
+
+              <!-- Expanded Details -->
+              <div 
+                class="overflow-hidden transition-all duration-500 ease-in-out"
+                :style="{ maxHeight: isExpanded[index] ? '200px' : '0px', opacity: isExpanded[index] ? '1' : '0' }"
+              >
+                <div class="pt-4 mt-2 border-t border-gray-100 text-sm text-gray-600 italic bg-gray-50/50 -mx-8 px-8 py-4">
+                  {{ item.details }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Actions -->
+            <div class="px-8 py-5 bg-gray-50/80 border-t border-gray-100 flex items-center justify-between">
+              <UiButton variant="brand" size="sm" @click="selectItem(item)">
+                Select
+              </UiButton>
+
+              <UiButton variant="ghost" size="sm" @click="toggleExpand(index)">
+                {{ isExpanded[index] ? 'Read less' : 'Read more' }}
+                <svg
+                  class="h-4 w-4 transition-transform duration-300"
+                  :class="{ 'rotate-180': isExpanded[index] }"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </UiButton>
+            </div>
+          </UiCard>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -97,11 +107,11 @@ function showItem(){
   console.log('showIttem')
 }
 
-const selectItem = () => {
+const selectItem = () :void =>{
   console.log('666')
   chooseItem.value = '333'
 }
-const toggleExpand = (index) => {
+const toggleExpand = (index:number) => {
   console.log('777')
   isExpanded.value[index] =!isExpanded.value[index]
     // this.$set(this.isExpanded, index, !this.isExpanded[index]);
