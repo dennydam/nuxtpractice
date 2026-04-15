@@ -31,6 +31,7 @@
     "nuxt-headlessui": "^1.1.5",
     "prisma": "^5.10.2",
     "sass": "^1.69.5",
+    "sqlite3": "^5.1.7",
     "vitest": "^3.2.4",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
