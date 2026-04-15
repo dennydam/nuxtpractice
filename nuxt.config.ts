@@ -4,6 +4,11 @@ const path = require('path')
 console.log('test')
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  nitro: {
+    externals: {
+      external: ['sqlite3'],
+    },
+  },
   // nitro: {
   //   output: {
   //     publicDir: path.join(__dirname, 'docs'),
@@ -41,6 +46,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     '@samk-dev/nuxt-vcalendar',
+    
     // '@googleapis',
     'nuxt-headlessui',
     // '@kyvg/vue3-notification',
