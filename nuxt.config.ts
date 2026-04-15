@@ -4,11 +4,7 @@ const path = require('path')
 console.log('test')
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  nitro: {
-    externals: {
-      external: ['sqlite3'],
-    },
-  },
+
   // nitro: {
   //   output: {
   //     publicDir: path.join(__dirname, 'docs'),
@@ -24,6 +20,12 @@ export default defineNuxtConfig({
   //     credentials: true,
   //   },
   // },
+  nitro: {
+    externals: {
+      external: ['sqlite3'],
+    },
+  },
+
   app: {
     // baseURL: '/nuxtpractice/',
     buildAssetsDir: '/static/',
