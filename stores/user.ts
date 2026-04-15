@@ -66,10 +66,13 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function deleteAppointment(id: number): Promise<void> {
+    await $fetch('/api/appointment/', {
+      method: 'DELETE',
+      body: { appointmentId: id },
+    })
     userReservation.value = userReservation.value.filter(
       (reservation) => reservation.id !== id,
     )
-    sessionStorage.setItem('userReservation', JSON.stringify(userReservation.value))
   }
 
   return {
