@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { InputType } from '@/types/ui'
+import inputTheme from '@/themes/input'
 
 const props = withDefaults(defineProps<{
   modelValue?: string
@@ -11,6 +12,13 @@ const props = withDefaults(defineProps<{
   disabled?: boolean
   required?: boolean
   id?: string
+  ui?: {
+    root?: string
+    label?: string
+    input?: string
+    helper?: string
+    error?: string
+  }
 }>(), {
   modelValue: '',
   type: 'text',
@@ -25,7 +33,10 @@ const emit = defineEmits<{
 }>()
 
 const inputId = computed<string>(() => props.id ?? `input-${Math.random().toString(36).slice(2, 7)}`)
+const descId = computed<string>(() => `${inputId.value}-desc`)
 const hasError = computed<boolean>(() => !!props.errorMessage)
+
+const classes = computed(() => inputTheme({ hasError: hasError.value, disabled: props.disabled }))
 
 function handleInput(event: Event): void {
   const target = event.target
@@ -36,11 +47,11 @@ function handleInput(event: Event): void {
 </script>
 
 <template>
-  <div class="flex flex-col gap-1.5">
+  <div :class="classes.root({ class: props.ui?.root })">
     <label
       v-if="label"
       :for="inputId"
-      class="text-sm font-medium text-slate-700"
+      :class="classes.label({ class: props.ui?.label })"
     >
       {{ label }}
       <span v-if="required" class="ml-0.5 text-red-500">*</span>
@@ -53,21 +64,19 @@ function handleInput(event: Event): void {
       :placeholder="placeholder"
       :disabled="disabled"
       :required="required"
-      :class="[
-        'w-full rounded-lg border px-3 py-2 text-sm text-slate-800 outline-none',
-        'transition-colors duration-150 placeholder:text-slate-400',
-        'focus:ring-2 focus:ring-offset-0',
-        hasError
-          ? 'border-red-400 focus:border-red-400 focus:ring-red-200'
-          : 'border-slate-300 focus:border-emerald-500 focus:ring-emerald-100',
-        disabled ? 'cursor-not-allowed bg-slate-100 text-slate-400' : 'bg-white',
-      ]"
+      :aria-invalid="hasError"
+      :aria-describedby="(hasError || helperText) ? descId : undefined"
+      :class="classes.input({ class: props.ui?.input })"
       @input="handleInput"
       @blur="emit('blur', $event)"
       @focus="emit('focus', $event)"
     />
 
-    <p v-if="hasError" class="text-xs text-red-500">{{ errorMessage }}</p>
-    <p v-else-if="helperText" class="text-xs text-slate-500">{{ helperText }}</p>
+    <p v-if="hasError" :id="descId" :class="classes.error({ class: props.ui?.error })">
+      {{ errorMessage }}
+    </p>
+    <p v-else-if="helperText" :id="descId" :class="classes.helper({ class: props.ui?.helper })">
+      {{ helperText }}
+    </p>
   </div>
 </template>

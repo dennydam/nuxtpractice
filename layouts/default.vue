@@ -152,35 +152,25 @@
           您有 {{ userAppointmentData.length }} 筆預約.
         </p>
         <!-- 列出所有預約項 -->
-        <div v-for="item in userAppointmentData" :key="item.id" class="mb-4">
-          <!-- 預約項目 -->
-          <h3 class="text-gray-700">{{ item.treatment }}</h3>
-          <div class="flex  items-center ">
-            <p class="text-gray-700">預約時間: {{ item.appointmentTime }}</p>
-            <UiButton
-              variant="danger"
-              size="sm"
-              class="ml-2"
-              @click="deleteAppointment(item)"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                class="h-4 w-4"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"
-                />
-              </svg>
-            </UiButton>
-          </div>
-        </div>
+        <UiList :items="userAppointmentData" class="mt-4">
+          <template #default="{ item }">
+            <div class="flex items-center gap-3 py-3">
+              <div class="flex-1 min-w-0">
+                <p class="font-medium text-gray-800 truncate">{{ item.treatment }}</p>
+                <p class="text-sm text-gray-500 mt-0.5">{{ item.appointmentTime }}</p>
+              </div>
+              <UiBadge variant="success" dot>已預約</UiBadge>
+              <UiButton variant="danger" size="sm" @click="deleteAppointment(item)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="h-4 w-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6" />
+                </svg>
+              </UiButton>
+            </div>
+          </template>
+          <template #empty>
+            <p class="py-6 text-center text-sm text-gray-400">目前沒有任何預約</p>
+          </template>
+        </UiList>
         <!-- 關閉按鈕 -->
         <div class="flex">
           <UiButton
@@ -194,8 +184,6 @@
       </div>
     </div>
 
-    <!-- 彈出視窗 -->
-    <ReservationItem v-if="noshow" @showItem="showItem" />
   </div>
 </template>
 <script setup lang="ts">
@@ -205,7 +193,6 @@ import { useRouter } from 'vue-router'
 import type { ReservationApiResponse, AppointmentItem } from '@/types/appointment'
 
 const router = useRouter()
-const noshow = false
 
 const { $notify } = useNuxtApp()
 const userStore = useUserStore()
